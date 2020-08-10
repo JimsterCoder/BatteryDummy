@@ -1,14 +1,11 @@
 #!/usr/bin/python3
 #
-# This python3 program sends out requests to a Nisan Leaf BMS then outputs the reply to the stdout.
 # For use with PiCAN boards on the Raspberry Pi
 # http://skpang.co.uk/catalog/pican2-canbus-board-for-raspberry-pi-2-p-1475.html
 #
 # Make sure Python-CAN is installed first http://skpang.co.uk/blog/archives/1220
 #
-# http://www.mynissanleaf.com/viewtopic.php?f=44&t=11676&sid=9d8ebf1c2ac610a7e99deb79149f985c
-#
-# July 2018 Mark Hornby
+# August 2020 James Stulen
 #
 
 # samples commands for testing
@@ -42,7 +39,8 @@ class cSendMsg:
 	
 sendmsg = []
 tnow = int(round(time.time() * 1000))
-#F#0#0x358#8#F#F#0x13 0x56 0x10 0xFE 0x00 0x00 0x00 0x00#1000ms##
+# LIST OF MESSAGES TO BE SENT AT SET INTERVALS
+#0x358#8#F#F#0x13 0x56 0x10 0xFE 0x00 0x00 0x00 0x00#1000ms##
 msg = cSendMsg( 0x358, [0x13, 0x56, 0x10, 0xFE, 0x00, 0x00, 0x00, 0x00], 1000, tnow)
 sendmsg.append(msg)
 #F#0#0x4D8#8#F#F#0x00 0x42 0x00 0x00 0x00 0x8B 0x02 0x00#5000ms##
@@ -61,8 +59,16 @@ sendmsg.append(msg)
 msg = cSendMsg( 0x218, [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF], 5000, tnow)
 sendmsg.append(msg)
 
-
+rspmsg = []
+# LIST OF MESSAGE TO SEND IN RESPONSE TO 0x720
 #F#0# 0x758 #8#F#F#0x07 0x62 0x00 0x00 0x01 0x08 0x00 0x00#id0x720 10ms 1x bus0##
+msg = cSendMsg( 0x758, [0x07, 0x62, 0x00, 0x00, 0x01, 0x08, 0x00, 0x00], 0, 0)
+rspmsg.append(msg)
+
+
+
+
+
 #F#0# 0x558 #8#F#F#0x16 0x18 0x06 0x04 0x00 0x62 0x01 0x02#id0x720 30ms 1x bus0##
 #F#0# 0x598 #8#F#F#0x60 0x17 0x90 0x61 0xFF 0xFF 0xFF 0xFF#id0x720 30ms 1x bus0##
 #F#0# 0x5D8 #8#F#F#0x00 0x4C 0x47 0x20 0x43 0x48 0x45 0x4D#id0x720 30ms 1x bus0##
@@ -100,7 +106,7 @@ def read_can():
 	# if the q is empty an expection is raised
 	except queue.Empty:
 		#print("Empty")
-		return group_data
+		return 0
 	
 	
 #	c = '{0:f} {1:x} {2:x} '.format(message.timestamp, message.arbitration_id, message.dlc)
@@ -121,7 +127,7 @@ def read_can():
 	logging.info(byte_str)
 	print(byte_str)
 
-	return group_data
+	return message.arbitration_id
 
 #------------------------------------------------------------------------------
 # MAIN
@@ -158,7 +164,18 @@ try:
 		timenow = int(round(time.time() * 1000))
 
 		# non blocking read
-		data = read_can()
+		rx_id = read_can()
+		
+		if (rx_id != 0):
+			print ('Message Received ' + format(rx_id,' 02x'))
+			if (rx_id == 0x720):
+				for x in range(len(rspmsg)):
+					msg = can.Message(arbitration_id=rspmsg[x].id, data=rspmsg[x].msgdata, extended_id=False)
+					bus.send(msg)
+					print ('Response Sent ' + format(x,' 02x') + format(rspmsg[x].id,' 02x'))
+					# for loop delay
+					time.sleep(0.010)
+				
 
 		for x in range(len(sendmsg)):
 			if (timenow - sendmsg[x].time > sendmsg[x].interval):
