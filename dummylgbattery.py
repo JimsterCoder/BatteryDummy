@@ -11,9 +11,12 @@
 # July 2018 Mark Hornby
 #
 
-# samples for testing
+# samples commands for testing
 # 
 # ./cansend can1 010#cafeface
+# sudo /sbin/ip link set can1 up type can bitrate 500000
+# ./candump can0
+
 
 
 import os
@@ -23,9 +26,7 @@ import time
 import queue
 #import pickle
 from threading import Thread
-from gpiozero import LED #, OutputDevice
-#import test_data
-#from BatteryStatus import BatteryStatus
+#from gpiozero import LED #, OutputDevice
 
 #logging.basicConfig(filename='can.log',format='%(levelname)s:%(message)s', level=logging.WARN) # INFO-WARN
 logging.basicConfig(filename='can.log',format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG)
@@ -37,41 +38,12 @@ logging.warning('Warning Message')
 PID_UPDATE_BLOCK_REQUEST  = 0x720 #from inverter
 PID_UPDATE_BLOCK_RESPONSE = 0x758 #from battery
 
-GROUP_1 = 0x01 # 6 lines, precision SOC, Ah Capacity and perhaps battery State of Health %
-GROUP_2 = 0x02 # 29 lines, 96 cell voltages.
-GROUP_3 = 0x03 # 5 lines, Vmin and Vmax
-GROUP_4 = 0x04 # 3 lines, 4 pack temperatures.
-GROUP_5 = 0x05 # 11 lines, not sure what
-GROUP_6 = 0x06 # 4 lines, status of the resistive cell balancing shunts.
+msg_data = [[0x02, 0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
+			[0x02, 0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]]
 
-CRIT_VOLT_MAX = 4.15
-CRIT_VOLT_MIN = 3.00
-CRIT_VOLT_DELTA = 1.00
-CRIT_TEMP_MAX = 50
-CRIT_TEMP_MIN = 2
 
-WARN_VOLT_MAX = 4.1
-WARN_VOLT_MIN = 3.3
-WARN_VOLT_DELTA = 0.1
-WARN_TEMP_MAX = 40
-WARN_TEMP_MIN = 3
 
-RELAY_POS = LED(4) # Turn on first 
-RELAY_NEG = LED(26) # OFF is precharge ON is high voltage
 
-# Bring up can interface at 500kbps
-print('Bring up can0 interface....')
-os.system("sudo /sbin/ip link set can0 up type can bitrate 500000")
-time.sleep(0.1)
-print('Ready')
-
-try:
-	#bus = can.interface.Bus('can0', bustype='virtual') #TESTING
-	bus = can.interface.Bus(channel='can0', bustype='socketcan') #TESTING
-	#bus.set_filters([{"can_id": PID_REPLY, "can_mask": 0x00}])
-except OSError:
-	print('Cannot find PiCAN board.')
-	exit()
 
 #------------------------------------------------------------------------------
 def byte_formater(data):
@@ -88,7 +60,7 @@ def can_rx_task():	# Receive thread
 		q.put(message)	# Put message into queue
 
 #------------------------------------------------------------------------------
-def request_data(group, frames):
+def read_can():
 
 # initiallise byte array for all the group data
 	group_data = bytearray()
@@ -121,6 +93,26 @@ def request_data(group, frames):
 
 	return group_data
 
+#------------------------------------------------------------------------------
+# MAIN
+#------------------------------------------------------------------------------
+
+# Bring up can interface at 500kbps
+print('Bring up can0 interface....')
+os.system("sudo /sbin/ip link set can0 up type can bitrate 500000")
+time.sleep(0.1)
+print('Ready')
+
+try:
+	#bus = can.interface.Bus('can0', bustype='virtual') #TESTING
+	bus = can.interface.Bus(channel='can0', bustype='socketcan') #TESTING
+	#bus.set_filters([{"can_id": PID_REPLY, "can_mask": 0x00}])
+except OSError:
+	print('Cannot find PiCAN board.')
+	exit()
+
+
+
 q = queue.Queue()
 rx = Thread(target=can_rx_task) 
 rx.start()
@@ -131,7 +123,8 @@ mstime0 = int(round(time.time() * 1000))
 try:
 	while True:
 
-		data = request_data(GROUP_1, 6)
+		# non blocking read
+		data = read_can()
 
 		mstime1 = int(round(time.time() * 1000))
 		
@@ -140,7 +133,7 @@ try:
 			mstime0 = int(round(time.time() * 1000))
 			print ("Send Message")
 
-		time.sleep(0.100)
+		time.sleep(0.010)
 
 except KeyboardInterrupt:
 	#Catch keyboard interrupt
