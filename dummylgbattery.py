@@ -14,6 +14,8 @@
 # sudo /sbin/ip link set can1 up type can bitrate 500000
 # ./candump can0
 
+# message logging to file batterydummy.log in local directory
+
 import os
 import logging
 import can
@@ -142,7 +144,7 @@ def read_can():
 # MAIN
 #------------------------------------------------------------------------------
 #logging.basicConfig(filename='can.log',format='%(levelname)s:%(message)s', level=logging.WARN) # INFO-WARN
-logging.basicConfig(filename='can.log',format='%(asctime)s %(levelname)s:%(message)s', level=logging.INFO)
+logging.basicConfig(filename='batterydummy.log',format='%(asctime)s %(levelname)s:%(message)s', level=logging.INFO)
 logging.debug('Debug Message')
 logging.info('Info Message')
 logging.warning('Warning Message')
