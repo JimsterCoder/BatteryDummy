@@ -11,6 +11,11 @@
 # July 2018 Mark Hornby
 #
 
+# samples for testing
+# 
+# ./cansend can1 010#cafeface
+
+
 import os
 import logging
 import can
@@ -68,85 +73,33 @@ except OSError:
 	print('Cannot find PiCAN board.')
 	exit()
 
+#------------------------------------------------------------------------------
 def byte_formater(data):
 	"""This function takes a byte array and returns a dictionary object with 'int and 'str'."""
 	i = int.from_bytes(data, byteorder='big', signed=False)
 	s = ' '.join(format(b, '02x') for b in data)
 	return{'int':i, 'str':s}
 
-#def open_relays():
-#	time.sleep(2)
-#	#RELAY_POS.on() #TESTING
-#	#RELAY_NEG.on() #TESTING
-#	print('Relays open...battery isolated')
-
-#def status_check(mode,value,critical,warning,msg):
-#	if mode=='max':
-#		# Check for warning state
-#		if value >= critical:
-#			# Critical! --> Shudown
-#			Thread(target=open_relays).start #TESTING
-#			print("STATUS CHECK: %s max CRITICAL" % msg)
-#		elif value >= warning:
-#			# Warning!
-#			print("STATUS CHECK: %s max CRITICAL" % msg)
-#		else:
-#			print("\nSTATUS CHECK: %s max OK" % msg)
-#	elif mode=='min':
-#				# Check for warning state
-#		if value <= critical:
-#			# Critical! --> Shudown
-#			Thread(target=open_relays).start #TESTING
-#			print("STATUS CHECK: %s min CRITICAL" % msg)
-#		elif value <= warning:
-#			# Warning!
-#			print("STATUS CHECK: %s min CRITICAL" % msg)
-#		else:
-#			print("\nSTATUS CHECK: %s min OK" % msg)
-#	else:
-#		print("ERROR: unknown mode '%s' for %s" % (mode, msg))
-
+#------------------------------------------------------------------------------
 def can_rx_task():	# Receive thread
 	while True:
 		message = bus.recv()
 		#if message.arbitration_id == PID_REPLY:
 		q.put(message)	# Put message into queue
 
+#------------------------------------------------------------------------------
 def request_data(group, frames):
 
-#	# For testing without CAN board
-#	#return test_data.test_group_data(group) #TESTING
-#	
-#	print('\nData group '+ format(group, '02x'))
-#	logging.info('Request sent, expecting '+str(frames)+' frames')
-#
 # initiallise byte array for all the group data
 	group_data = bytearray()
-#
-#	# Send request for data for the group
-#	msg_data = [0x02, 0x21, group, 0x00, 0x00, 0x00, 0x00, 0x00]
-#	msg = can.Message(arbitration_id=PID_REQUEST, data=msg_data, extended_id=False)
-#	bus.send(msg)
-#	time.sleep(sleep)
 
-	# Wait for a reply / Wait until there is a message
-	# Remove and return an item from the queue.
-	# If queue is empty, wait until an item is available.
-	message = q.get()
-
-#	if message.arbitration_id == 0x7BB and message.data[0] == 0x10:
-#		#print(' '.join(format(x, '02x') for x in message.data))
-#		for x in range(1, 8):
-#			group_data.append(message.data[x])
-#		msg_data = [0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
-#		msg = can.Message(arbitration_id=PID_REQUEST, data=msg_data, extended_id=False)
-#		bus.send(msg)
-#		#print('ACK sent')
-#
-#	for _ in range(frames-1):
-#		message = q.get()
-#		#print(' '.join(format(x, '02x') for x in message.data))
-#		# The first (index) byte is ignored, should probablly check it's in the right order
+	try:
+		message = q.get(False)
+	# if the q is empty an expection is raised
+	except queue.Empty:
+		#print("Empty")
+		return group_data
+	
 	
 	c = '{0:f} {1:x} {2:x} '.format(message.timestamp, message.arbitration_id, message.dlc)
 	s=''
@@ -162,34 +115,32 @@ def request_data(group, frames):
 	byte_str = ""
 	for x in range(len(group_data)):
 		value = format(group_data[x],'02x')
-#		if x%7 != 6:
 		byte_str = byte_str + value + ' '
-#		else:
-#			byte_str = byte_str + value + '\n'
 	logging.info(byte_str)
     
 
 	return group_data
 
 q = queue.Queue()
-rx = Thread(target=can_rx_task) #TESTING
-rx.start() #TESTING
+rx = Thread(target=can_rx_task) 
+rx.start()
 
-bat_stat = None
+mstime0 = int(round(time.time() * 1000))
 
 # Main loop
 try:
 	while True:
 
 		data = request_data(GROUP_1, 6)
-		
-		#file_Name = "BatteryStatus.dat"
-		#fileObject = open(file_Name, 'wb')
-		#pickle.dump(bat_stat,fileObject)
-		#fileObject.close()
 
-		#exit() #TESTING
-		#time.sleep(10)
+		mstime1 = int(round(time.time() * 1000))
+		
+		msdiff= mstime1 - mstime0
+		if (msdiff > 2000):
+			mstime0 = int(round(time.time() * 1000))
+			print ("Send Message")
+
+		time.sleep(0.100)
 
 except KeyboardInterrupt:
 	#Catch keyboard interrupt
