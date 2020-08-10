@@ -14,8 +14,6 @@
 # sudo /sbin/ip link set can1 up type can bitrate 500000
 # ./candump can0
 
-
-
 import os
 import logging
 import can
@@ -37,9 +35,11 @@ class cSendMsg:
 		self.interval = interval
 		self.time = time
 	
-sendmsg = []
-tnow = int(round(time.time() * 1000))
+# get time in milliseconds
+tnow = int(round(time.time() * 1000)) 
+
 # LIST OF MESSAGES TO BE SENT AT SET INTERVALS
+sendmsg = []
 #0x358#8#F#F#0x13 0x56 0x10 0xFE 0x00 0x00 0x00 0x00#1000ms##
 msg = cSendMsg( 0x358, [0x13, 0x56, 0x10, 0xFE, 0x00, 0x00, 0x00, 0x00], 1000, tnow)
 sendmsg.append(msg)
@@ -59,27 +59,29 @@ sendmsg.append(msg)
 msg = cSendMsg( 0x218, [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF], 5000, tnow)
 sendmsg.append(msg)
 
+# LIST OF MESSAGES TO SEND IN RESPONSE TO 0x720
 rspmsg = []
-# LIST OF MESSAGE TO SEND IN RESPONSE TO 0x720
 #F#0# 0x758 #8#F#F#0x07 0x62 0x00 0x00 0x01 0x08 0x00 0x00#id0x720 10ms 1x bus0##
-msg = cSendMsg( 0x758, [0x07, 0x62, 0x00, 0x00, 0x01, 0x08, 0x00, 0x00], 0, 0)
+msg = cSendMsg( 0x758, [0x07, 0x62, 0x00, 0x00, 0x01, 0x08, 0x00, 0x00], 10, 0)
 rspmsg.append(msg)
-
-
-
-
-
 #F#0# 0x558 #8#F#F#0x16 0x18 0x06 0x04 0x00 0x62 0x01 0x02#id0x720 30ms 1x bus0##
+msg = cSendMsg( 0x558, [0x16, 0x18, 0x06, 0x04, 0x00, 0x62, 0x01, 0x02], 10, 0)
+rspmsg.append(msg)
 #F#0# 0x598 #8#F#F#0x60 0x17 0x90 0x61 0xFF 0xFF 0xFF 0xFF#id0x720 30ms 1x bus0##
+msg = cSendMsg( 0x598, [0x60, 0x17, 0x90, 0x61, 0xFF, 0xFF, 0xFF, 0xFF], 10, 0)
+rspmsg.append(msg)
 #F#0# 0x5D8 #8#F#F#0x00 0x4C 0x47 0x20 0x43 0x48 0x45 0x4D#id0x720 30ms 1x bus0##
+msg = cSendMsg( 0x5D8, [0x00, 0x4C, 0x47, 0x20, 0x43, 0x48, 0x45, 0x4D], 10, 0)
+rspmsg.append(msg)
 #F#0# 0x5D8 #8#F#F#0x01 0x00 0x00 0x01 0x08 0x00 0x00 0x00#id0x720 35ms 1x bus0##
+msg = cSendMsg( 0x5D8, [0x01, 0x00, 0x00, 0x01, 0x08, 0x00, 0x00, 0x00], 10, 0)
+rspmsg.append(msg)
 #F#0# 0x618 #8#F#F#0x00 0x52 0x45 0x53 0x55 0x31 0x30 0x48#id0x720 40ms 1x bus0##
+msg = cSendMsg( 0x618, [0x00, 0x52, 0x45, 0x53, 0x55, 0x31, 0x30, 0x48], 10, 0)
+rspmsg.append(msg)
 #F#0# 0x618 #8#F#F#0x01 0x00 0x00 0x01 0x08 0x00 0x00 0x00#id0x720 45ms 1x bus0##
-#F####F#F####
-#
-
-
-
+msg = cSendMsg( 0x618, [0x01, 0x00, 0x00, 0x01, 0x08, 0x00, 0x00, 0x00], 10, 0)
+rspmsg.append(msg)
 
 #------------------------------------------------------------------------------
 def byte_formater(data):
@@ -108,13 +110,11 @@ def read_can():
 		#print("Empty")
 		return 0
 	
-	
 #	c = '{0:f} {1:x} {2:x} '.format(message.timestamp, message.arbitration_id, message.dlc)
 #	s=''
 #	for i in range(message.dlc ):
 #		s +=  '{0:x} '.format(message.data[i])
 #	print(' {}'.format(c+s))
-
 	
 	for x in range(message.dlc):
 		group_data.append(message.data[x])
@@ -163,7 +163,7 @@ try:
 	while True:
 		timenow = int(round(time.time() * 1000))
 
-		# non blocking read
+		# non-blocking read
 		rx_id = read_can()
 		
 		if (rx_id != 0):
@@ -173,8 +173,8 @@ try:
 					msg = can.Message(arbitration_id=rspmsg[x].id, data=rspmsg[x].msgdata, extended_id=False)
 					bus.send(msg)
 					print ('Response Sent ' + format(x,' 02x') + format(rspmsg[x].id,' 02x'))
-					# for loop delay
-					time.sleep(0.010)
+					# send for loop delay
+					time.sleep(rspmsg[x].interval/1000) # interval is in milliseconds
 				
 
 		for x in range(len(sendmsg)):
@@ -183,9 +183,8 @@ try:
 				msg = can.Message(arbitration_id=sendmsg[x].id, data=sendmsg[x].msgdata, extended_id=False)
 				bus.send(msg)
 				print ('Message Sent ' + format(x,' 02x') + format(sendmsg[x].id,' 02x'))
-				# for loop delay
+				# send for loop delay
 				time.sleep(0.010)
-
 
 		# main loop delay
 		time.sleep(0.010)
