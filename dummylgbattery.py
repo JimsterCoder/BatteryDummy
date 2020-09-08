@@ -5,7 +5,7 @@
 #
 # Make sure Python-CAN is installed first http://skpang.co.uk/blog/archives/1220
 #
-# August 2020 James Stulen
+# August/Sept 2020 James Stulen
 #
 
 # samples commands for testing
@@ -17,7 +17,7 @@
 # message logging to file batterydummy.log in local directory
 
 import os
-import logging
+#import logging
 import can
 import time
 import queue
@@ -41,53 +41,42 @@ tnow = int(round(time.time() * 1000))
 # LIST OF MESSAGES TO BE SENT AT SET INTERVALS
 sendmsg = []
 
-#0x358#8#F#F#0x13 0x56 0x10 0xFE 0x00 0x00 0x00 0x00#1000ms##
-msg = cSendMsg( 0x358, [0x13, 0x56, 0x10, 0xFE, 0x00, 0x00, 0x00, 0x00], 1000, tnow)
+msg = cSendMsg( 0x358, [0x13, 0x56, 0x10, 0xFE, 0x00, 0xA2, 0x00, 0xA2], 1000, tnow)
 sendmsg.append(msg)
 
-#F#0#0x4D8#8#F#F#0x00 0x42 0x00 0x00 0x00 0x8B 0x02 0x00#5000ms##
-msg = cSendMsg( 0x4D8, [0x00, 0x42, 0x00, 0x00, 0x00, 0x8B, 0x02, 0x00], 5000, tnow)
+msg = cSendMsg( 0x4D8, [0x00, 0x16, 0x00, 0x00, 0x00, 0xA1, 0x02, 0x00], 5000, tnow)
 sendmsg.append(msg)
 
-#F#0#0x3D8#8#F#F#0x1A 0xB1 0x27 0x10 0xFF 0xFF 0xFF 0xFF#5000ms##
 msg = cSendMsg( 0x3D8, [0x1A, 0xB1, 0x27, 0x10, 0xFF, 0xFF, 0xFF, 0xFF], 5000, tnow)
 sendmsg.append(msg)
 
-#F#0#0x158#8#F#F#0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00#5000ms##
 msg = cSendMsg( 0x158, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], 5000, tnow)
 sendmsg.append(msg)
 
-#F#0#0x198#8#F#F#0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF#5000ms##
 msg = cSendMsg( 0x198, [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF], 5000, tnow)
 sendmsg.append(msg)
 
-#F#0#0x218#8#F#F#0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF#5000ms##
 msg = cSendMsg( 0x218, [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF], 5000, tnow)
 sendmsg.append(msg)
 
 # LIST OF MESSAGES TO SEND IN RESPONSE TO 0x720
 rspmsg = []
 
-#F#0# 0x758 #8#F#F#0x07 0x62 0x00 0x00 0x01 0x08 0x00 0x00#id0x720 10ms 1x bus0##
 msg = cSendMsg( 0x758, [0x07, 0x62, 0x00, 0x00, 0x01, 0x08, 0x00, 0x00], 10, 0)
 rspmsg.append(msg)
 
-#F#0# 0x558 #8#F#F#0x16 0x18 0x06 0x04 0x00 0x62 0x01 0x02#id0x720 30ms 1x bus0##
 msg = cSendMsg( 0x558, [0x16, 0x18, 0x06, 0x04, 0x00, 0x62, 0x01, 0x02], 10, 0)
 rspmsg.append(msg)
 
-#F#0# 0x598 #8#F#F#0x60 0x17 0x90 0x61 0xFF 0xFF 0xFF 0xFF#id0x720 30ms 1x bus0##
 msg = cSendMsg( 0x598, [0x60, 0x17, 0x90, 0x61, 0xFF, 0xFF, 0xFF, 0xFF], 10, 0)
 rspmsg.append(msg)
 
-#F#0# 0x5D8 #8#F#F#0x00 0x4C 0x47 0x20 0x43 0x48 0x45 0x4D#id0x720 30ms 1x bus0##
 msg = cSendMsg( 0x5D8, [0x00, 0x4C, 0x47, 0x20, 0x43, 0x48, 0x45, 0x4D], 10, 0)
-#msg = cSendMsg( 0x5D8, [ord("M"), ord("O"), ord("N"), ord("K"), ord("E"), ord("Y"), 0, 0], 0, 0)
+#msg = cSendMsg( 0x5D8, [ord("M"), ord("O"), ord("N"), ord("K"), ord("E"), ord("Y"), 0, 0], 10, 0)
 rspmsg.append(msg)
 msg = cSendMsg( 0x5D8, [0x01, 0, 0, 0, 0, 0, 0, 0], 10, 0)
 rspmsg.append(msg)
 
-#F#0# 0x618 #8#F#F#0x00 0x52 0x45 0x53 0x55 0x31 0x30 0x48#id0x720 40ms 1x bus0##
 msg = cSendMsg( 0x618, [0x00, 0x52, 0x45, 0x53, 0x55, 0x31, 0x30, 0x48], 10, 0)
 #msg = cSendMsg( 0x618, [ord("A"), ord("B"), ord("C"), ord("D"), ord("E"), ord("F"), ord("G"), ord("H")], 10, 0)
 rspmsg.append(msg)
@@ -135,23 +124,23 @@ def read_can():
 	for x in range(len(group_data)):
 		value = format(group_data[x],'02x')
 		byte_str = byte_str + value + ' '
-	logging.info(byte_str)
-	print(byte_str)
+	#logginginfo(byte_str)
+	##print(byte_str)
 
 	return message.arbitration_id
 
 #------------------------------------------------------------------------------
 # MAIN
 #------------------------------------------------------------------------------
-#logging.basicConfig(filename='can.log',format='%(levelname)s:%(message)s', level=logging.WARN) # INFO-WARN
-logging.basicConfig(filename='batterydummy.log',format='%(asctime)s %(levelname)s:%(message)s', level=logging.INFO)
-logging.debug('Debug Message')
-logging.info('Info Message')
-logging.warning('Warning Message')
+##loggingbasicConfig(filename='can.log',format='%(levelname)s:%(message)s', level=#loggingWARN) # INFO-WARN
+#loggingbasicConfig(filename='batterydummy.log',format='%(asctime)s %(levelname)s:%(message)s', level=#loggingINFO)
+#loggingdebug('Debug Message')
+#logginginfo('Info Message')
+#loggingwarning('Warning Message')
 
 # Bring up can interface at 500kbps
 print('Bring up can0 interface....')
-logging.info('Bring up can0 interface....')
+#logginginfo('Bring up can0 interface....')
 os.system("sudo /sbin/ip link set can0 up type can bitrate 500000")
 time.sleep(0.1)
 print('Ready')
@@ -178,12 +167,13 @@ try:
 		rx_id = read_can()
 		
 		if (rx_id != 0):
-			print ('Message Received ' + format(rx_id,' 02x'))
+			#print ('Message Received ' + format(rx_id,' 02x'))
 			if (rx_id == PID_UPDATE_BLOCK_REQUEST):
+				print('Received 720')
 				for x in range(len(rspmsg)):
 					msg = can.Message(arbitration_id=rspmsg[x].id, data=rspmsg[x].msgdata, extended_id=False)
 					bus.send(msg)
-					print ('Response Sent ' + format(x,' 02x') + format(rspmsg[x].id,' 02x'))
+					##print ('Response Sent ' + format(x,' 02x') + format(rspmsg[x].id,' 02x'))
 					# send for loop delay
 					time.sleep(rspmsg[x].interval/1000) # interval is in milliseconds
 				
@@ -193,7 +183,7 @@ try:
 				sendmsg[x].time = int(round(time.time() * 1000))
 				msg = can.Message(arbitration_id=sendmsg[x].id, data=sendmsg[x].msgdata, extended_id=False)
 				bus.send(msg)
-				print ('Message Sent ' + format(x,' 02x') + format(sendmsg[x].id,' 02x'))
+				##print ('Message Sent ' + format(x,' 02x') + format(sendmsg[x].id,' 02x'))
 				# send for loop delay
 				time.sleep(0.010)
 
@@ -204,3 +194,4 @@ except KeyboardInterrupt:
 	#Catch keyboard interrupt
 	os.system("sudo /sbin/ip link set can0 down")
 	print('\n\rKeyboard interrupt')
+	
