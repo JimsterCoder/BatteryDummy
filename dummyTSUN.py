@@ -84,9 +84,13 @@ def HiByte(value):
 
 #------------------------------------------------------------------------------
 # LIST OF MESSAGES TO SEND IN RESPONSE TO INVERTER QUERY 'ENSEMBILE INFORMATION' byte 0 = 0
+# TSUN doc says LSB so we will put lo byte first in the 2 byte values
+# this is opposite of the AOS/SMA and done this way because LSB was not checked
+# on SavvyCAN Signals from the AOS/SMA
+
 ensemblerspmsg = []
 
-# Battery Info 
+# 0x4210 Battery Info 
 BatPileTotVolt = 300
 BatPileCur = 50
 SecLvlBMSTemp = 20
@@ -94,12 +98,45 @@ BatSOC = 51
 BatSOH = 70
 
 # 0x4210+0,  2x Bat total voltage * 10, 2x Bat Current * 10, 2x BMS temp *10 -100, 1x SOC, 1x SOH
-msg = cSendMsg( 0x42100, [ LoByte( BatPileTotVolt*10 ), HiByte( BatPileTotVolt*10) , LoByte( BatPileCur*10 ), HiByte( BatPileCur*10 ), LoByte(-100 + SecLvlBMSTemp*10 ), HiByte( -100 + SecLvlBMSTemp*10), LoByte( BatSOC), LoByte( BatSOH*) ], 0, 0)
+msg = cSendMsg( 0x42100, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *10) , LoByte( BatPileCur *10 ), HiByte( BatPileCur *10 ), LoByte(-100 + SecLvlBMSTemp *10 ), HiByte( -100 + SecLvlBMSTemp *10), LoByte( BatSOC), LoByte( BatSOH) ], 0, 0)
+ensemblerspmsg.append(msg)
+
+# 0x4220 Charge Limits
+ChargeCutoffVolt = 301
+DischargeCutoffVolt = 293
+MaxChargeCur = 20
+MaxDischargeCur = 20
+
+# 0x4220+0, 2x charge cuttff voltage * 10, 2x discharge cuttoff voltage * 10, max charge current *10 -3000, max discharge current *10 - 3000
+msg = cSendMsg( 0x42200, [ LoByte( ChargeCutoffVolt*10 ), HiByte( ChargeCutoffVolt*10) , LoByte( DischargeCutoffVolt *10 ), HiByte( DischargeCutoffVolt *10 ), LoByte(-3000 + MaxChargeCur *10 ), HiByte( -3000 + MaxChargeCur *10), LoByte( -3000 + MaxDischargeCur *10), HiByte( -3000 + MaxDischargeCur *10) ], 0, 0)
+ensemblerspmsg.append(msg)
+
+# 0x4230 Cell Data
+MaxSingleCellVolt = 1
+MinSingleCellVolt = 0
+MaxSingleCellNumber = 1
+MinSingleCellNumber = 0
+
+# 0x4230+0, 2x cell voltage * 1000, 2x cell number
+msg = cSendMsg( 0x42300, [ LoByte( MaxSingleCellVolt *1000 ), HiByte( MaxSingleCellVolt *1000 ) , LoByte( MinSingleCellVolt *1000 ), HiByte( MinSingleCellVolt * 1000 ), LoByte( MaxSingleCellNumber ), HiByte(  MaxSingleCellNumber), LoByte( MinSingleCellNumber ), HiByte( MinSingleCellNumber) ], 0, 0)
+ensemblerspmsg.append(msg)
+
+# 0x4240 Cell Temperatures
+MaxCellTemp = 50
+MinCellTemp = 0
+MaxCellTempNumber = 1
+MinCellTempNumber = 0
+
+# 0x4240+0, 2x cell temp *10 -100, 2x cell number 
+msg = cSendMsg( 0x42200, [ LoByte( -100 + MaxCellTemp *10  ), HiByte( -100 + MaxCellTemp *10 ) , LoByte( -100 + MinCellTemp *10  ), HiByte( -100 + MinCellTemp *10  ), LoByte( MaxCellTempNumber ), HiByte() MaxCellTempNumber ), LoByte( MinCellTempNumber ), HiByte( MinCellTempNumber ) ], 0, 0)
 ensemblerspmsg.append(msg)
 
 
-#------------------------------------------------------------------------------
 
+# 0x4220 
+# 0x4220+0, 
+#msg = cSendMsg( 0x42200, [ LoByte(  ), HiByte( ) , LoByte(  ), HiByte(  ), LoByte( ), HiByte( ), LoByte( ), HiByte() ], 0, 0)
+#ensemblerspmsg.append(msg)
 
 #------------------------------------------------------------------------------
 # MAIN
