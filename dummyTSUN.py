@@ -35,6 +35,12 @@ class cSendMsg:
 		self.time = time
 
 #------------------------------------------------------------------------------
+class cCanRead:
+  def __init__(self, arbitration_id, byte0):
+     self.arbitration_id = arbitration_id
+     self.msg_type = msg_type
+
+#------------------------------------------------------------------------------
 def can_rx_task():	# Receive thread
 	while True:
 		message = bus.recv()
@@ -71,7 +77,7 @@ def read_can():
 	#logginginfo(byte_str)
 	##print(byte_str)
 
-	return message.arbitration_id
+	return cCanRead( message.arbitration_id, group_data[0] )
 
 #------------------------------------------------------------------------------
 def LoByte(value):
@@ -98,7 +104,7 @@ BatSOC = 51
 BatSOH = 70
 
 # 0x4210+0,  2x Bat total voltage * 10, 2x Bat Current * 10, 2x BMS temp *10 -100, 1x SOC, 1x SOH
-msg = cSendMsg( 0x42100, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *10) , LoByte( BatPileCur *10 ), HiByte( BatPileCur *10 ), LoByte(-100 + SecLvlBMSTemp *10 ), HiByte( -100 + SecLvlBMSTemp *10), LoByte( BatSOC), LoByte( BatSOH) ], 0, 0)
+msg = cSendMsg( 0x42100, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *10) , LoByte( BatPileCur *10 ), HiByte( BatPileCur *10 ), LoByte(-100 + SecLvlBMSTemp *10 ), HiByte( -100 + SecLvlBMSTemp *10), LoByte( BatSOC), LoByte( BatSOH) ], 10, 0)
 ensemblerspmsg.append(msg)
 
 # 0x4220 Charge Limits
@@ -108,7 +114,7 @@ MaxChargeCur = 20
 MaxDischargeCur = 20
 
 # 0x4220+0, 2x charge cuttff voltage * 10, 2x discharge cuttoff voltage * 10, max charge current *10 -3000, max discharge current *10 - 3000
-msg = cSendMsg( 0x42200, [ LoByte( ChargeCutoffVolt*10 ), HiByte( ChargeCutoffVolt*10) , LoByte( DischargeCutoffVolt *10 ), HiByte( DischargeCutoffVolt *10 ), LoByte(-3000 + MaxChargeCur *10 ), HiByte( -3000 + MaxChargeCur *10), LoByte( -3000 + MaxDischargeCur *10), HiByte( -3000 + MaxDischargeCur *10) ], 0, 0)
+msg = cSendMsg( 0x42200, [ LoByte( ChargeCutoffVolt*10 ), HiByte( ChargeCutoffVolt*10) , LoByte( DischargeCutoffVolt *10 ), HiByte( DischargeCutoffVolt *10 ), LoByte(-3000 + MaxChargeCur *10 ), HiByte( -3000 + MaxChargeCur *10), LoByte( -3000 + MaxDischargeCur *10), HiByte( -3000 + MaxDischargeCur *10) ], 10, 0)
 ensemblerspmsg.append(msg)
 
 # 0x4230 Cell Data
@@ -118,7 +124,7 @@ MaxSingleCellNumber = 1
 MinSingleCellNumber = 0
 
 # 0x4230+0, 2x cell voltage * 1000, 2x cell number
-msg = cSendMsg( 0x42300, [ LoByte( MaxSingleCellVolt *1000 ), HiByte( MaxSingleCellVolt *1000 ) , LoByte( MinSingleCellVolt *1000 ), HiByte( MinSingleCellVolt * 1000 ), LoByte( MaxSingleCellNumber ), HiByte(  MaxSingleCellNumber), LoByte( MinSingleCellNumber ), HiByte( MinSingleCellNumber) ], 0, 0)
+msg = cSendMsg( 0x42300, [ LoByte( MaxSingleCellVolt *1000 ), HiByte( MaxSingleCellVolt *1000 ) , LoByte( MinSingleCellVolt *1000 ), HiByte( MinSingleCellVolt * 1000 ), LoByte( MaxSingleCellNumber ), HiByte(  MaxSingleCellNumber), LoByte( MinSingleCellNumber ), HiByte( MinSingleCellNumber) ], 10, 0)
 ensemblerspmsg.append(msg)
 
 # 0x4240 Cell Temperatures
@@ -128,7 +134,7 @@ MaxCellTempNumber = 1
 MinCellTempNumber = 0
 
 # 0x4240+0, 2x cell temp *10 -100, 2x cell number 
-msg = cSendMsg( 0x42200, [ LoByte( -100 + MaxCellTemp *10  ), HiByte( -100 + MaxCellTemp *10 ) , LoByte( -100 + MinCellTemp *10  ), HiByte( -100 + MinCellTemp *10  ), LoByte( MaxCellTempNumber ), HiByte() MaxCellTempNumber ), LoByte( MinCellTempNumber ), HiByte( MinCellTempNumber ) ], 0, 0)
+msg = cSendMsg( 0x42200, [ LoByte( -100 + MaxCellTemp *10  ), HiByte( -100 + MaxCellTemp *10 ) , LoByte( -100 + MinCellTemp *10  ), HiByte( -100 + MinCellTemp *10  ), LoByte( MaxCellTempNumber ), HiByte( MaxCellTempNumber ), LoByte( MinCellTempNumber ), HiByte( MinCellTempNumber ) ], 10, 0)
 ensemblerspmsg.append(msg)
 
 
@@ -174,28 +180,31 @@ try:
 		timenow = int(round(time.time() * 1000))
 
 		# non-blocking read, returns 0 if nothing read
-		rx_id = read_can()
+		rx_data = read_can()
 		
-		if (rx_id != 0):
+		print (rx_data)
+		if (rx_data.arbitration_id != 0):
 			#print ('Message Received ' + format(rx_id,' 02x'))
-			if (rx_id == PID_INVERTER_HANDSHAKE_REQ):
-				print('Received 560')
-				for x in range(len(rspmsg)):
-					msg = can.Message(arbitration_id=rspmsg[x].id, data=rspmsg[x].msgdata, extended_id=False)
-					bus.send(msg)
-					##print ('Response Sent ' + format(x,' 02x') + format(rspmsg[x].id,' 02x'))
-					# send for loop delay
-					time.sleep(rspmsg[x].interval/1000) # interval is in milliseconds
+			if (rx_data.arbitration_id == PID_INVERTER_QUERY):
+				print('Received 4200')
+				#check first byte is 0 or 2
+				if (rx_data.msg_type == 0):
+					for x in range(len(ensemblerspmsg)):
+						msg = can.Message(arbitration_id=ensemblerspmsg[x].id, data=ensemblerspmsg[x].msgdata, extended_id=True)
+						bus.send(msg)
+						##print ('Response Sent ' + format(x,' 02x') + format(rspmsg[x].id,' 02x'))
+						# send for loop delay
+						time.sleep(ensemblerspmsg[x].interval/1000) # interval is in milliseconds
 				
 
-		for x in range(len(sendmsg)):
-			if (timenow - sendmsg[x].time > sendmsg[x].interval):
-				sendmsg[x].time = int(round(time.time() * 1000))
-				msg = can.Message(arbitration_id=sendmsg[x].id, data=sendmsg[x].msgdata, extended_id=False)
-				bus.send(msg)
-				##print ('Message Sent ' + format(x,' 02x') + format(sendmsg[x].id,' 02x'))
-				# send for loop delay
-				time.sleep(0.001)
+		# for x in range(len(sendmsg)):
+		# 	if (timenow - sendmsg[x].time > sendmsg[x].interval):
+		# 		sendmsg[x].time = int(round(time.time() * 1000))
+		# 		msg = can.Message(arbitration_id=sendmsg[x].id, data=sendmsg[x].msgdata, extended_id=False)
+		# 		bus.send(msg)
+		# 		##print ('Message Sent ' + format(x,' 02x') + format(sendmsg[x].id,' 02x'))
+		# 		# send for loop delay
+		# 		time.sleep(0.001)
 
 		# main loop delay
 		time.sleep(0.001)
