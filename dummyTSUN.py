@@ -36,8 +36,8 @@ class cSendMsg:
 
 #------------------------------------------------------------------------------
 class cCanRead:
-  def __init__(self, arbitration_id, byte0):
-     self.arbitration_id = arbitration_id
+  def __init__(self, msg_id, msg_type):
+     self.msg_id = msg_id
      self.msg_type = msg_type
 
 #------------------------------------------------------------------------------
@@ -58,14 +58,8 @@ def read_can():
 	# if the q is empty an exception is raised
 	except queue.Empty:
 		#print("Empty")
-		return 0
-	
-#	c = '{0:f} {1:x} {2:x} '.format(message.timestamp, message.arbitration_id, message.dlc)
-#	s=''
-#	for i in range(message.dlc ):
-#		s +=  '{0:x} '.format(message.data[i])
-#	print(' {}'.format(c+s))
-	
+		return cCanRead(0,0)
+		
 	for x in range(message.dlc):
 		group_data.append(message.data[x])
 		
@@ -74,8 +68,6 @@ def read_can():
 	for x in range(len(group_data)):
 		value = format(group_data[x],'02x')
 		byte_str = byte_str + value + ' '
-	#logginginfo(byte_str)
-	##print(byte_str)
 
 	return cCanRead( message.arbitration_id, group_data[0] )
 
@@ -173,7 +165,6 @@ q = queue.Queue()
 rx = Thread(target=can_rx_task) 
 rx.start()
 
-
 # Main loop
 try:
 	while True:
@@ -181,11 +172,11 @@ try:
 
 		# non-blocking read, returns 0 if nothing read
 		rx_data = read_can()
+		#print (rx_data)
 		
-		print (rx_data)
-		if (rx_data.arbitration_id != 0):
+		if (rx_data.msg_id != 0):
 			#print ('Message Received ' + format(rx_id,' 02x'))
-			if (rx_data.arbitration_id == PID_INVERTER_QUERY):
+			if (rx_data.msg_id == PID_INVERTER_QUERY):
 				print('Received 4200')
 				#check first byte is 0 or 2
 				if (rx_data.msg_type == 0):
