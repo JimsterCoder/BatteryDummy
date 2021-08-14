@@ -210,9 +210,9 @@ try:
 		#print (rx_data)
 		
 		if (rx_data.msg_id != 0):
-			#print ('Message Received ' + format(rx_id,' 02x'))
+			print ('Message Received ' + format(rx_id,' 02x'))
 			if (rx_data.msg_id == PID_INVERTER_QUERY):
-				print('Received 4200: msg_type', rx_data.msg_type)
+				print('Received: ',rx_data.msg_id,'  msg_type: ', rx_data.msg_type)
 				#check first byte is 0 or 2
 				if (rx_data.msg_type == 0):
 					for x in range(len(ensemblerspmsg)):
