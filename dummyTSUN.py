@@ -74,11 +74,11 @@ def read_can():
 #------------------------------------------------------------------------------
 def LoByte(value):
 	lobyte = value%256
-	return lobyte
+	return int(lobyte)
 
 def HiByte(value):
 	hibyte = int(value/256)
-	return hibyte
+	return int(hibyte)
 
 #------------------------------------------------------------------------------
 # LIST OF MESSAGES TO SEND IN RESPONSE TO INVERTER QUERY 'ENSEMBILE INFORMATION' byte 0 = 0
@@ -95,7 +95,7 @@ SecLvlBMSTemp = 16
 BatSOC = 32
 BatSOH = 64
 
-# 0x4210+0,  2x Bat total voltage * 10, 2x Bat Current * 10, 2x BMS temp *10 +100, 1x SOC, 1x SOH
+# 0x4210+0
 msg = cSendMsg( 0x42100, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *10) , LoByte( BatPileCur *10 ), HiByte( BatPileCur *10 ), LoByte((100 + SecLvlBMSTemp) *10 ), HiByte((100 + SecLvlBMSTemp) *10), LoByte( BatSOC), LoByte( BatSOH) ], 10, 0)
 ensemblerspmsg.append(msg)
 
@@ -105,7 +105,7 @@ DischargeCutoffVolt = 0x0123
 MaxChargeCur = 20
 MaxDischargeCur = 20
 
-# 0x4220+0, 2x charge cuttff voltage * 10, 2x discharge cuttoff voltage * 10, max charge current *10 +3000, max discharge current *10 - 3000
+# 0x4220+0 
 msg = cSendMsg( 0x42200, [ LoByte( ChargeCutoffVolt*10 ), HiByte( ChargeCutoffVolt*10) , LoByte( DischargeCutoffVolt *10 ), HiByte( DischargeCutoffVolt *10 ), LoByte((+3000 + MaxChargeCur) *10 ), HiByte((+3000 + MaxChargeCur) *10), LoByte((+3000 + MaxDischargeCur) *10), HiByte((+3000 + MaxDischargeCur) *10) ], 10, 0)
 ensemblerspmsg.append(msg)
 
@@ -115,7 +115,7 @@ MinSingleCellVolt = 0
 MaxSingleCellNumber = 1
 MinSingleCellNumber = 0
 
-# 0x4230+0, 2x cell voltage * 1000, 2x cell number
+# 0x4230+0
 msg = cSendMsg( 0x42300, [ LoByte( MaxSingleCellVolt *1000 ), HiByte( MaxSingleCellVolt *1000 ) , LoByte( MinSingleCellVolt *1000 ), HiByte( MinSingleCellVolt * 1000 ), LoByte( MaxSingleCellNumber ), HiByte(  MaxSingleCellNumber), LoByte( MinSingleCellNumber ), HiByte( MinSingleCellNumber) ], 10, 0)
 ensemblerspmsg.append(msg)
 
@@ -125,15 +125,50 @@ MinCellTemp = 0
 MaxCellTempNumber = 1
 MinCellTempNumber = 0
 
-# 0x4240+0, 2x cell temp *10 +100, 2x cell number 
-msg = cSendMsg( 0x42200, [ LoByte((+100 + MaxCellTemp) *10  ), HiByte((+100 + MaxCellTemp) *10 ) , LoByte((+100 + MinCellTemp) *10  ), HiByte((+100 + MinCellTemp) *10  ), LoByte( MaxCellTempNumber ), HiByte( MaxCellTempNumber ), LoByte( MinCellTempNumber ), HiByte( MinCellTempNumber ) ], 10, 0)
+# 0x4240+0
+msg = cSendMsg( 0x42400, [ LoByte((+100 + MaxCellTemp) *10  ), HiByte((+100 + MaxCellTemp) *10 ) , LoByte((+100 + MinCellTemp) *10  ), HiByte((+100 + MinCellTemp) *10  ), LoByte( MaxCellTempNumber ), HiByte( MaxCellTempNumber ), LoByte( MinCellTempNumber ), HiByte( MinCellTempNumber ) ], 10, 0)
+ensemblerspmsg.append(msg)
+
+# 0x4250 Status,Error,Alarm,Protection
+BasicStatus = 3 # 3 means idle
+CyclePeriod = 0 #WTF is this?
+Error = 0 
+Alarm = 0
+Protection = 0
+
+# 0x4250+0 
+msg = cSendMsg( 0x42500, [ LoByte( BasicStatus  ), LoByte( CyclePeriod), HiByte( CyclePeriod ) , LoByte( Error ), LoByte( Alarm ), HiByte( Alarm ), LoByte(Protection ), HiByte( Protection ) ], 10, 0)
+ensemblerspmsg.append(msg)
+
+# 0x4260 Module Volts
+ModuleMaxVolt = 4.5
+ModuleMinVolt = 3.5
+ModuleMaxVoltNumber = 1
+ModuleMinVoltNumber = 0 
+# 0x4260+0
+msg = cSendMsg( 0x42600, [ LoByte( ModuleMaxVolt *1000 ), HiByte( ModuleMaxVolt *1000 ) , LoByte( ModuleMinVolt *1000 ), HiByte( ModuleMinVolt *1000 ), LoByte( ModuleMaxVoltNumber ), HiByte( ModuleMaxVoltNumber ), LoByte( ModuleMinVoltNumber ), HiByte( ModuleMinVoltNumber ) ], 10, 0)
+ensemblerspmsg.append(msg)
+
+# 0x4270 Module Temps 
+ModuleMaxTemp = 50
+ModuleMinTemp = 0
+ModuleMaxTempNumber = 1
+ModuleMinTempNumber = 0
+# 0x4270+0
+msg = cSendMsg( 0x42700, [ LoByte((+100 + ModuleMaxTemp) *10  ), HiByte((+100 + ModuleMaxTemp) *10 ) , LoByte((+100 + ModuleMinTemp) *10  ), HiByte((+100 + ModuleMinTemp) *10  ), LoByte( ModuleMaxTempNumber ), HiByte( ModuleMaxTempNumber ), LoByte( ModuleMinTempNumber ), HiByte( ModuleMinTempNumber ) ], 10, 0)
+ensemblerspmsg.append(msg)
+
+# 0x4280 
+ChargeForbidden = 0 # 0xAA for effect
+DischargeForbidden = 0 # 0xAA for effect
+# 0x4280+0 
+msg = cSendMsg( 0x42800, [ LoByte( ChargeForbidden ), LoByte( DischargeForbidden ), 0,0,0,0,0,0 ], 10, 0)
 ensemblerspmsg.append(msg)
 
 
-
 # 0x4220 
-# 0x4220+0, 
-#msg = cSendMsg( 0x42200, [ LoByte(  ), HiByte( ) , LoByte(  ), HiByte(  ), LoByte( ), HiByte( ), LoByte( ), HiByte() ], 0, 0)
+# 0x4220+0 
+#msg = cSendMsg( 0x42200, [ LoByte(  ), HiByte( ) , LoByte(  ), HiByte(  ), LoByte( ), HiByte( ), LoByte( ), HiByte() ], 10, 0)
 #ensemblerspmsg.append(msg)
 
 #------------------------------------------------------------------------------
