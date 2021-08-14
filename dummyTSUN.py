@@ -74,11 +74,11 @@ def read_can():
 #------------------------------------------------------------------------------
 def LoByte(value):
 	lobyte = value%256
-	return hex(lobyte)
+	return lobyte
 
 def HiByte(value):
 	hibyte = int(value/256)
-	return hex(hibyte)
+	return hibyte
 
 #------------------------------------------------------------------------------
 # LIST OF MESSAGES TO SEND IN RESPONSE TO INVERTER QUERY 'ENSEMBILE INFORMATION' byte 0 = 0
@@ -89,24 +89,24 @@ def HiByte(value):
 ensemblerspmsg = []
 
 # 0x4210 Battery Info 
-BatPileTotVolt = 300
-BatPileCur = 50
-SecLvlBMSTemp = 20
-BatSOC = 51
-BatSOH = 70
+BatPileTotVolt = 256
+BatPileCur = 255
+SecLvlBMSTemp = 16
+BatSOC = 32
+BatSOH = 64
 
-# 0x4210+0,  2x Bat total voltage * 10, 2x Bat Current * 10, 2x BMS temp *10 -100, 1x SOC, 1x SOH
-msg = cSendMsg( 0x42100, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *10) , LoByte( BatPileCur *10 ), HiByte( BatPileCur *10 ), LoByte(-100 + SecLvlBMSTemp *10 ), HiByte( -100 + SecLvlBMSTemp *10), LoByte( BatSOC), LoByte( BatSOH) ], 10, 0)
+# 0x4210+0,  2x Bat total voltage * 10, 2x Bat Current * 10, 2x BMS temp *10 +100, 1x SOC, 1x SOH
+msg = cSendMsg( 0x42100, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *10) , LoByte( BatPileCur *10 ), HiByte( BatPileCur *10 ), LoByte((100 + SecLvlBMSTemp) *10 ), HiByte((100 + SecLvlBMSTemp) *10), LoByte( BatSOC), LoByte( BatSOH) ], 10, 0)
 ensemblerspmsg.append(msg)
 
 # 0x4220 Charge Limits
-ChargeCutoffVolt = 301
-DischargeCutoffVolt = 293
+ChargeCutoffVolt = 0x1234
+DischargeCutoffVolt = 0x0123
 MaxChargeCur = 20
 MaxDischargeCur = 20
 
-# 0x4220+0, 2x charge cuttff voltage * 10, 2x discharge cuttoff voltage * 10, max charge current *10 -3000, max discharge current *10 - 3000
-msg = cSendMsg( 0x42200, [ LoByte( ChargeCutoffVolt*10 ), HiByte( ChargeCutoffVolt*10) , LoByte( DischargeCutoffVolt *10 ), HiByte( DischargeCutoffVolt *10 ), LoByte(-3000 + MaxChargeCur *10 ), HiByte( -3000 + MaxChargeCur *10), LoByte( -3000 + MaxDischargeCur *10), HiByte( -3000 + MaxDischargeCur *10) ], 10, 0)
+# 0x4220+0, 2x charge cuttff voltage * 10, 2x discharge cuttoff voltage * 10, max charge current *10 +3000, max discharge current *10 - 3000
+msg = cSendMsg( 0x42200, [ LoByte( ChargeCutoffVolt*10 ), HiByte( ChargeCutoffVolt*10) , LoByte( DischargeCutoffVolt *10 ), HiByte( DischargeCutoffVolt *10 ), LoByte((+3000 + MaxChargeCur) *10 ), HiByte((+3000 + MaxChargeCur) *10), LoByte((+3000 + MaxDischargeCur) *10), HiByte((+3000 + MaxDischargeCur) *10) ], 10, 0)
 ensemblerspmsg.append(msg)
 
 # 0x4230 Cell Data
@@ -125,8 +125,8 @@ MinCellTemp = 0
 MaxCellTempNumber = 1
 MinCellTempNumber = 0
 
-# 0x4240+0, 2x cell temp *10 -100, 2x cell number 
-msg = cSendMsg( 0x42200, [ LoByte( -100 + MaxCellTemp *10  ), HiByte( -100 + MaxCellTemp *10 ) , LoByte( -100 + MinCellTemp *10  ), HiByte( -100 + MinCellTemp *10  ), LoByte( MaxCellTempNumber ), HiByte( MaxCellTempNumber ), LoByte( MinCellTempNumber ), HiByte( MinCellTempNumber ) ], 10, 0)
+# 0x4240+0, 2x cell temp *10 +100, 2x cell number 
+msg = cSendMsg( 0x42200, [ LoByte((+100 + MaxCellTemp) *10  ), HiByte((+100 + MaxCellTemp) *10 ) , LoByte((+100 + MinCellTemp) *10  ), HiByte((+100 + MinCellTemp) *10  ), LoByte( MaxCellTempNumber ), HiByte( MaxCellTempNumber ), LoByte( MinCellTempNumber ), HiByte( MinCellTempNumber ) ], 10, 0)
 ensemblerspmsg.append(msg)
 
 
@@ -177,7 +177,7 @@ try:
 		if (rx_data.msg_id != 0):
 			#print ('Message Received ' + format(rx_id,' 02x'))
 			if (rx_data.msg_id == PID_INVERTER_QUERY):
-				print('Received 4200')
+				print('Received 4200: msg_type', rx_data.msg_type)
 				#check first byte is 0 or 2
 				if (rx_data.msg_type == 0):
 					for x in range(len(ensemblerspmsg)):
