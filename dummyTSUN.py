@@ -87,6 +87,7 @@ def HiByte(value):
 # on SavvyCAN Signals from the AOS/SMA
 
 ensemblerspmsg = []
+sysinfomsg = []
 
 # 0x4210 Battery Info 
 BatPileTotVolt = 350
@@ -165,6 +166,25 @@ DischargeForbidden = 0 # 0xAA for effect
 msg = cSendMsg( 0x42800, [ LoByte( ChargeForbidden ), LoByte( DischargeForbidden ), 0,0,0,0,0,0 ], 10, 0)
 ensemblerspmsg.append(msg)
 
+#------------------------------------------------------------------------------
+# LIST OF MESSAGES TO SEND IN RESPONSE TO INVERTER QUERY 'SYSTEM EQUIPMENT INFORMATION' byte 0 = 2
+
+# 0x7310
+# 0x7310+0 
+msg = cSendMsg( 0x73100, [ 0X10, 0X10, 0X10, 0X10, 0X10, 0X10, 0X10, 0 ], 10, 0)
+sysinfomsg.append(msg)
+
+# 0x7320 
+BatteryModuleQuantity = 48
+BatteryModuleInSeries = 48
+CellQuantityInModule = 2
+VoltLevel = 4
+AHNumber = 66 * BatSOH/100 # 66 AH Leaf battery capacity
+# last 1 byte reserve
+
+# 0x7320+0 
+msg = cSendMsg( 0x73200, [ LoByte( BatteryModuleQuantity ), HiByte( BatteryModuleQuantity ) , LoByte( BatteryModuleInSeries  ), LoByte( CellQuantityInModule ), LoByte( VoltLevel ),  HiByte( VoltLevel ), LoByte( AHNumber ), 0 ], 10, 0)
+sysinfomsg.append(msg)
 
 # 0x4220 
 # 0x4220+0 
@@ -210,18 +230,27 @@ try:
 		#print (rx_data)
 		
 		if (rx_data.msg_id != 0):
-			print ('Message Received ' + format(rx_id,' 02x'))
+			print ('Message Received ' + format(rx_data.msg_id,' 02x'))
 			if (rx_data.msg_id == PID_INVERTER_QUERY):
-				print('Received: ',rx_data.msg_id,'  msg_type: ', rx_data.msg_type)
+				print('Received: ',format(rx_data.msg_id, '02x'),'  msg_type: ', rx_data.msg_type)
 				#check first byte is 0 or 2
 				if (rx_data.msg_type == 0):
 					for x in range(len(ensemblerspmsg)):
 						msg = can.Message(arbitration_id=ensemblerspmsg[x].id, data=ensemblerspmsg[x].msgdata, extended_id=True)
 						bus.send(msg)
-						##print ('Response Sent ' + format(x,' 02x') + format(rspmsg[x].id,' 02x'))
 						# send for loop delay
 						time.sleep(ensemblerspmsg[x].interval/1000) # interval is in milliseconds
-				
+					print ('Ensemble Response Sent ')
+
+				elif (rx_data.msg_type == 2):
+					for x in range(len(sysinfomsg)):
+						msg = can.Message(arbitration_id=sysinfomsg[x].id, data=sysinfomsg[x].msgdata, extended_id=True)
+						bus.send(msg)
+						# send for loop delay
+						time.sleep(sysinfomsg[x].interval/1000) # interval is in milliseconds
+					print ('System Info Response Sent ')
+
+
 
 		# for x in range(len(sendmsg)):
 		# 	if (timenow - sendmsg[x].time > sendmsg[x].interval):
