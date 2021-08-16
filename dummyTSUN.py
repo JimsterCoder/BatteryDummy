@@ -16,6 +16,8 @@
 
 # message logging to file batterydummy.log in local directory
 
+#Niall testing git abilities. I cloned the git to get it from github onto our Pi3. I'm now going to attempt to merge it back into github with this mod.
+
 import os
 #import logging
 import can
