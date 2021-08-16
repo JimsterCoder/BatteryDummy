@@ -99,7 +99,7 @@ BatSOC = 50
 BatSOH = 60
 
 # 0x4210+0
-msg = cSendMsg( 0x42100, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *10) , LoByte( BatPileCur *10 ), HiByte( BatPileCur *10 ), LoByte((100 + SecLvlBMSTemp) *10 ), HiByte((100 + SecLvlBMSTemp) *10), LoByte( BatSOC), LoByte( BatSOH) ], 10, 0)
+msg = cSendMsg( 0x42100, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *10) , LoByte( BatPileCur *10 ), HiByte( BatPileCur *10 ), LoByte((100 + SecLvlBMSTemp) *10 ), HiByte((100 + SecLvlBMSTemp) *10),  int(BatSOC),  int(BatSOH) ], 10, 0)
 ensemblerspmsg.append(msg)
 
 # 0x4220 Charge Limits
@@ -140,7 +140,7 @@ Alarm = 0
 Protection = 0
 
 # 0x4250+0 
-msg = cSendMsg( 0x42500, [ LoByte( BasicStatus  ), LoByte( CyclePeriod), HiByte( CyclePeriod ) , LoByte( Error ), LoByte( Alarm ), HiByte( Alarm ), LoByte(Protection ), HiByte( Protection ) ], 10, 0)
+msg = cSendMsg( 0x42500, [  BasicStatus, LoByte( CyclePeriod), HiByte( CyclePeriod ) , Error , LoByte( Alarm ), HiByte( Alarm ), LoByte( Protection ), HiByte( Protection ) ], 10, 0)
 ensemblerspmsg.append(msg)
 
 # 0x4260 Module Volts
@@ -185,7 +185,7 @@ AHNumber = 66 * BatSOH/100 # 66 AH Leaf battery capacity
 # last 1 byte reserve
 
 # 0x7320+0 
-msg = cSendMsg( 0x73200, [ LoByte( BatteryModuleQuantity ), HiByte( BatteryModuleQuantity ) , LoByte( BatteryModuleInSeries  ), LoByte( CellQuantityInModule ), LoByte( VoltLevel ),  HiByte( VoltLevel ), LoByte( AHNumber ), 0 ], 10, 0)
+msg = cSendMsg( 0x73200, [ LoByte( BatteryModuleQuantity ), HiByte( BatteryModuleQuantity ) , BatteryModuleInSeries, CellQuantityInModule, LoByte( VoltLevel ),  HiByte( VoltLevel ), int(AHNumber), 0 ], 10, 0)
 sysinfomsg.append(msg)
 
 # 0x4220 
