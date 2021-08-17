@@ -99,7 +99,7 @@ BatSOC = 50
 BatSOH = 60
 
 # 0x4210+0
-msg = cSendMsg( 0x42100, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *10) , LoByte( BatPileCur *10 ), HiByte( BatPileCur *10 ), LoByte((100 + SecLvlBMSTemp) *10 ), HiByte((100 + SecLvlBMSTemp) *10),  int(BatSOC),  int(BatSOH) ], 10, 0)
+msg = cSendMsg( 0x42100, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *10) , LoByte((3000 + BatPileCur) *10 ), HiByte((3000 + BatPileCur) *10 ), LoByte((100 + SecLvlBMSTemp) *10 ), HiByte((100 + SecLvlBMSTemp) *10),  int(BatSOC),  int(BatSOH) ], 10, 0)
 ensemblerspmsg.append(msg)
 
 # 0x4220 Charge Limits
