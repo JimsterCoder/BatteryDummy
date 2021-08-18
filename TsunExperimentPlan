@@ -1,0 +1,16 @@
+These are all to be done with spoof BMS messages and no actual BMS on the Leaf Battery.
+It is reccomended that we monitor the Leaf BMS via savvy CAN to ensure we don't push the battery beyond its safe cell and overall voltage limits.
+
+1/
+Adjust spoofed:
+*Max Charge Current to limit power to 1kW (@390V ~2.5A)
+*Max pile voltage to 390V
+
+Run inverter on 'force charge mode'. Observe if these limits are observed
+-Side project see if the sign on charge currrent makes a difference.
+
+2/
+Adjust spoofed SOC to be outside of inverter's limits (95% & 15% I believe).
+See if inverter will behave appropriately.
+
+3/?
