@@ -91,92 +91,92 @@ def HiByte(value):
 ensemblerspmsg = []
 sysinfomsg = []
 
-# 0x4210 Battery Info 
+# Battery Info 
 BatPileTotVolt = 382
 BatPileCur = 0
 SecLvlBMSTemp = 15
 BatSOC = 75
 BatSOH = 60
 
-# 0x4210+0
-msg = cSendMsg( 0x42100, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *10) , LoByte((3000 + BatPileCur) *10 ), HiByte((3000 + BatPileCur) *10 ), LoByte((100 + SecLvlBMSTemp) *10 ), HiByte((100 + SecLvlBMSTemp) *10),  int(BatSOC),  int(BatSOH) ], 10, 0)
+# 0x421+1
+msg = cSendMsg( 0x4211, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *10) , LoByte((3000 + BatPileCur) *10 ), HiByte((3000 + BatPileCur) *10 ), LoByte((100 + SecLvlBMSTemp) *10 ), HiByte((100 + SecLvlBMSTemp) *10),  int(BatSOC),  int(BatSOH) ], 10, 0)
 ensemblerspmsg.append(msg)
 
-# 0x4220 Charge Limits
+# Charge Limits
 ChargeCutoffVolt = 399.9
 DischargeCutoffVolt = 281
 MaxChargeCur = 100
 MaxDischargeCur = -100
 
-# 0x4220+0 
-msg = cSendMsg( 0x42200, [ LoByte( ChargeCutoffVolt*10 ), HiByte( ChargeCutoffVolt*10) , LoByte( DischargeCutoffVolt *10 ), HiByte( DischargeCutoffVolt *10 ), LoByte((+3000 + MaxChargeCur) *10 ), HiByte((+3000 + MaxChargeCur) *10), LoByte((+3000 + MaxDischargeCur) *10), HiByte((+3000 + MaxDischargeCur) *10) ], 10, 0)
+# 0x422+1 
+msg = cSendMsg( 0x4221, [ LoByte( ChargeCutoffVolt*10 ), HiByte( ChargeCutoffVolt*10) , LoByte( DischargeCutoffVolt *10 ), HiByte( DischargeCutoffVolt *10 ), LoByte((+3000 + MaxChargeCur) *10 ), HiByte((+3000 + MaxChargeCur) *10), LoByte((+3000 + MaxDischargeCur) *10), HiByte((+3000 + MaxDischargeCur) *10) ], 10, 0)
 ensemblerspmsg.append(msg)
 
-# 0x4230 Cell Data
+# Cell Data
 MaxSingleCellVolt = 3.980
 MinSingleCellVolt = 3.978
 MaxSingleCellNumber = 1
 MinSingleCellNumber = 2
 
-# 0x4230+0
-msg = cSendMsg( 0x42300, [ LoByte( MaxSingleCellVolt *1000 ), HiByte( MaxSingleCellVolt *1000 ) , LoByte( MinSingleCellVolt *1000 ), HiByte( MinSingleCellVolt * 1000 ), LoByte( MaxSingleCellNumber ), HiByte(  MaxSingleCellNumber), LoByte( MinSingleCellNumber ), HiByte( MinSingleCellNumber) ], 10, 0)
+# 0x423+1
+msg = cSendMsg( 0x4231, [ LoByte( MaxSingleCellVolt *1000 ), HiByte( MaxSingleCellVolt *1000 ) , LoByte( MinSingleCellVolt *1000 ), HiByte( MinSingleCellVolt * 1000 ), LoByte( MaxSingleCellNumber ), HiByte(  MaxSingleCellNumber), LoByte( MinSingleCellNumber ), HiByte( MinSingleCellNumber) ], 10, 0)
 ensemblerspmsg.append(msg)
 
-# 0x4240 Cell Temperatures
+# Cell Temperatures
 MaxCellTemp = 16
 MinCellTemp = 14
 MaxCellTempNumber = 3
 MinCellTempNumber = 4
 
-# 0x4240+0
-msg = cSendMsg( 0x42400, [ LoByte((+100 + MaxCellTemp) *10  ), HiByte((+100 + MaxCellTemp) *10 ) , LoByte((+100 + MinCellTemp) *10  ), HiByte((+100 + MinCellTemp) *10  ), LoByte( MaxCellTempNumber ), HiByte( MaxCellTempNumber ), LoByte( MinCellTempNumber ), HiByte( MinCellTempNumber ) ], 10, 0)
+# 0x424+1
+msg = cSendMsg( 0x4241, [ LoByte((+100 + MaxCellTemp) *10  ), HiByte((+100 + MaxCellTemp) *10 ) , LoByte((+100 + MinCellTemp) *10  ), HiByte((+100 + MinCellTemp) *10  ), LoByte( MaxCellTempNumber ), HiByte( MaxCellTempNumber ), LoByte( MinCellTempNumber ), HiByte( MinCellTempNumber ) ], 10, 0)
 ensemblerspmsg.append(msg)
 
-# 0x4250 Status,Error,Alarm,Protection
+# Status,Error,Alarm,Protection
 BasicStatus = 3 # 3 means idle
 CyclePeriod = 0 #WTF is this?
 Error = 0 
 Alarm = 0
 Protection = 0
 
-# 0x4250+0 
-msg = cSendMsg( 0x42500, [  BasicStatus, LoByte( CyclePeriod), HiByte( CyclePeriod ) , Error , LoByte( Alarm ), HiByte( Alarm ), LoByte( Protection ), HiByte( Protection ) ], 10, 0)
+# 0x425+1
+msg = cSendMsg( 0x4251, [  BasicStatus, LoByte( CyclePeriod), HiByte( CyclePeriod ) , Error , LoByte( Alarm ), HiByte( Alarm ), LoByte( Protection ), HiByte( Protection ) ], 10, 0)
 ensemblerspmsg.append(msg)
 
-# 0x4260 Module Volts
+# Module Volts
 ModuleMaxVolt = 2 * MaxSingleCellVolt
 ModuleMinVolt = 2 * MinSingleCellVolt
 ModuleMaxVoltNumber = 1
 ModuleMinVoltNumber = 2 
-# 0x4260+0
-msg = cSendMsg( 0x42600, [ LoByte( ModuleMaxVolt *1000 ), HiByte( ModuleMaxVolt *1000 ) , LoByte( ModuleMinVolt *1000 ), HiByte( ModuleMinVolt *1000 ), LoByte( ModuleMaxVoltNumber ), HiByte( ModuleMaxVoltNumber ), LoByte( ModuleMinVoltNumber ), HiByte( ModuleMinVoltNumber ) ], 10, 0)
+# 0x426+1
+msg = cSendMsg( 0x4261, [ LoByte( ModuleMaxVolt *1000 ), HiByte( ModuleMaxVolt *1000 ) , LoByte( ModuleMinVolt *1000 ), HiByte( ModuleMinVolt *1000 ), LoByte( ModuleMaxVoltNumber ), HiByte( ModuleMaxVoltNumber ), LoByte( ModuleMinVoltNumber ), HiByte( ModuleMinVoltNumber ) ], 10, 0)
 ensemblerspmsg.append(msg)
 
-# 0x4270 Module Temps 
+# Module Temps 
 ModuleMaxTemp = 16
 ModuleMinTemp = 14
 ModuleMaxTempNumber = 3
 ModuleMinTempNumber = 4
-# 0x4270+0
-msg = cSendMsg( 0x42700, [ LoByte((+100 + ModuleMaxTemp) *10  ), HiByte((+100 + ModuleMaxTemp) *10 ) , LoByte((+100 + ModuleMinTemp) *10  ), HiByte((+100 + ModuleMinTemp) *10  ), LoByte( ModuleMaxTempNumber ), HiByte( ModuleMaxTempNumber ), LoByte( ModuleMinTempNumber ), HiByte( ModuleMinTempNumber ) ], 10, 0)
+# 0x427+1
+msg = cSendMsg( 0x4271, [ LoByte((+100 + ModuleMaxTemp) *10  ), HiByte((+100 + ModuleMaxTemp) *10 ) , LoByte((+100 + ModuleMinTemp) *10  ), HiByte((+100 + ModuleMinTemp) *10  ), LoByte( ModuleMaxTempNumber ), HiByte( ModuleMaxTempNumber ), LoByte( ModuleMinTempNumber ), HiByte( ModuleMinTempNumber ) ], 10, 0)
 ensemblerspmsg.append(msg)
 
-# 0x4280 
+# Charge/Dis command 
 ChargeForbidden = 0 # 0xAA for effect
 DischargeForbidden = 0 # 0xAA for effect
-# 0x4280+0 
-msg = cSendMsg( 0x42800, [ LoByte( ChargeForbidden ), LoByte( DischargeForbidden ), 0,0,0,0,0,0 ], 10, 0)
+# 0x428+1 
+msg = cSendMsg( 0x4281, [ LoByte( ChargeForbidden ), LoByte( DischargeForbidden ), 0,0,0,0,0,0 ], 10, 0)
 ensemblerspmsg.append(msg)
 
 #------------------------------------------------------------------------------
 # LIST OF MESSAGES TO SEND IN RESPONSE TO INVERTER QUERY 'SYSTEM EQUIPMENT INFORMATION' byte 0 = 2
 
-# 0x7310
-# 0x7310+0 
-msg = cSendMsg( 0x73100, [ 0X10, 0X10, 0X10, 0X10, 0X10, 0X10, 0X10, 0 ], 10, 0)
+# Version Info - see documentaion
+# 0x731+1 
+msg = cSendMsg( 0x7311, [ 0X10, 0X10, 0X10, 0X10, 0X10, 0X10, 0X10, 0 ], 10, 0)
 sysinfomsg.append(msg)
 
-# 0x7320 
+# 0x732+1
 BatteryModuleQuantity = 48
 BatteryModuleInSeries = 48
 CellQuantityInModule = 2
@@ -184,8 +184,8 @@ VoltLevel = 4
 AHNumber = 66 * BatSOH/100 # 66 AH Leaf battery capacity
 # last 1 byte reserve
 
-# 0x7320+0 
-msg = cSendMsg( 0x73200, [ LoByte( BatteryModuleQuantity ), HiByte( BatteryModuleQuantity ) , BatteryModuleInSeries, CellQuantityInModule, LoByte( VoltLevel ),  HiByte( VoltLevel ), int(AHNumber), 0 ], 10, 0)
+# 0x732+1 
+msg = cSendMsg( 0x7321, [ LoByte( BatteryModuleQuantity ), HiByte( BatteryModuleQuantity ) , BatteryModuleInSeries, CellQuantityInModule, LoByte( VoltLevel ),  HiByte( VoltLevel ), int(AHNumber), 0 ], 10, 0)
 sysinfomsg.append(msg)
 
 # 0x4220 
