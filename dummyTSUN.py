@@ -75,12 +75,16 @@ def read_can():
 
 #------------------------------------------------------------------------------
 def LoByte(value):
-	lobyte = value%256
-	return int(lobyte)
-
-def HiByte(value):
+	#lobyte = value%256
+	#return int(lobyte)
 	hibyte = int(value/256)
 	return int(hibyte)
+
+def HiByte(value):
+	#hibyte = int(value/256)
+	#return int(hibyte)
+	lobyte = value%256
+	return int(lobyte)
 
 #------------------------------------------------------------------------------
 # LIST OF MESSAGES TO SEND IN RESPONSE TO INVERTER QUERY 'ENSEMBILE INFORMATION' byte 0 = 0
@@ -165,7 +169,7 @@ ensemblerspmsg.append(msg)
 ChargeForbidden = 0 # 0xAA for effect
 DischargeForbidden = 0 # 0xAA for effect
 # 0x4280+0 
-msg = cSendMsg( 0x42800, [ LoByte( ChargeForbidden ), LoByte( DischargeForbidden ), 0,0,0,0,0,0 ], 10, 0)
+msg = cSendMsg( 0x42800, [ ChargeForbidden , DischargeForbidden, 0,0,0,0,0,0 ], 10, 0)
 ensemblerspmsg.append(msg)
 
 #------------------------------------------------------------------------------
