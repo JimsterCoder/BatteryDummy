@@ -92,10 +92,10 @@ ensemblerspmsg = []
 sysinfomsg = []
 
 # 0x4210 Battery Info 
-BatPileTotVolt = 350
+BatPileTotVolt = 382
 BatPileCur = 0
 SecLvlBMSTemp = 15
-BatSOC = 50
+BatSOC = 75
 BatSOH = 60
 
 # 0x4210+0
@@ -113,8 +113,8 @@ msg = cSendMsg( 0x42200, [ LoByte( ChargeCutoffVolt*10 ), HiByte( ChargeCutoffVo
 ensemblerspmsg.append(msg)
 
 # 0x4230 Cell Data
-MaxSingleCellVolt = 3.646
-MinSingleCellVolt = 3.645
+MaxSingleCellVolt = 3.980
+MinSingleCellVolt = 3.978
 MaxSingleCellNumber = 1
 MinSingleCellNumber = 2
 
