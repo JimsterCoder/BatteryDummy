@@ -103,10 +103,10 @@ msg = cSendMsg( 0x4211, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *
 ensemblerspmsg.append(msg)
 
 # Charge Limits
-ChargeCutoffVolt = 399.9
-DischargeCutoffVolt = 281
-MaxChargeCur = 100
-MaxDischargeCur = -100
+ChargeCutoffVolt = 390
+DischargeCutoffVolt = 380
+MaxChargeCur = 2.5
+MaxDischargeCur = -1.5
 
 # 0x422+1 
 msg = cSendMsg( 0x4221, [ LoByte( ChargeCutoffVolt*10 ), HiByte( ChargeCutoffVolt*10) , LoByte( DischargeCutoffVolt *10 ), HiByte( DischargeCutoffVolt *10 ), LoByte((+3000 + MaxChargeCur) *10 ), HiByte((+3000 + MaxChargeCur) *10), LoByte((+3000 + MaxDischargeCur) *10), HiByte((+3000 + MaxDischargeCur) *10) ], 10, 0)
