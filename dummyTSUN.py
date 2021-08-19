@@ -129,7 +129,7 @@ ensemblerspmsg = []
 sysinfomsg = []
 
 # Battery Info 
-BatPileTotVolt = 389
+BatPileTotVolt = 387
 BatPileCur = 0
 SecLvlBMSTemp = 15
 BatSOC = 75
@@ -141,9 +141,9 @@ ensemblerspmsg.append(msg)
 
 # Charge Limits
 ChargeCutoffVolt = 391 #going just above actual voltage to see if this stops the inverter asking us to sleep
-DischargeCutoffVolt = 385
+DischargeCutoffVolt = 360 #Going a fair bit below our current voltage
 MaxChargeCur = 2.5
-MaxDischargeCur = -5.25 #Max we should do through the 10A socket it is currently wired into (2000W @380V)
+MaxDischargeCur = 5.25 #Max we should do through the 10A socket it is currently wired into (2000W @380V)
 
 # 0x422+1 
 msg = cSendMsg( 0x4221, [ LoByte( ChargeCutoffVolt*10 ), HiByte( ChargeCutoffVolt*10) , LoByte( DischargeCutoffVolt *10 ), HiByte( DischargeCutoffVolt *10 ), LoByte((+3000 + MaxChargeCur) *10 ), HiByte((+3000 + MaxChargeCur) *10), LoByte((+3000 + MaxDischargeCur) *10), HiByte((+3000 + MaxDischargeCur) *10) ], 10, 0)
