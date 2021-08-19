@@ -30,7 +30,7 @@ GPIO.setmode(GPIO.BCM)
 #from gpiozero import LED #, OutputDevice
 #------------------------------------------------------------------------------
 PID_INVERTER_QUERY  = 0x4200 #from inverter
-PID_SLEEP_AWAKE_COMMAND = 0x8200
+PID_SLEEP_AWAKE_COMMAND = 0x8201 #from inverter, sent to battery 1
 PID_SLEEP_AWAKE_COMMAND_Req_Sleep = 0x55
 PID_SLEEP_AWAKE_COMMAND_Quit_sleep = 0xAA
 
