@@ -8,8 +8,20 @@ Adjust spoofed data to to limit power to 1kW (@390V ~2.5A) and tighter (very saf
 MaxChargeCur = 2.5
 MaxDischargeCur = -1.5
 
-Run inverter on 'force charge' & 'Self Use'modes. Observe if these limits are observed
+Run inverter on 
+A'force charge' & 
+B 'Self Use'modes.
+Observe if these limits are observed
 -Side project see if the sign on charge currrent makes a difference.
+
+RESULTS:
+Inverter observed MaxChargeCur and ChargeCutoffVolt.
+After changing settings to Self Use the inverter sent out a request for battery to sleep (8201, 55). It did this regardless of what mode I tried.
+Modifying code to acknowledge this request and also switch on contactors on reeeipt of Inverter traffic did not change this behaviour.
+Ideas:
+C Adjust spoofed voltage to actual batt voltage now it's charged up
+D operate contactors based on received 8201 mode request. Possibly prepare for 8211 requests also.
+
 
 2/
 Adjust spoofed SOC to be outside of inverter's limits (95% & 15% I believe).
