@@ -103,7 +103,7 @@ msg = cSendMsg( 0x4211, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *
 ensemblerspmsg.append(msg)
 
 # Charge Limits
-ChargeCutoffVolt = 390
+ChargeCutoffVolt = 391 #going just above actual voltage to see if this stops the inverter asking us to sleep
 DischargeCutoffVolt = 385
 MaxChargeCur = 2.5
 MaxDischargeCur = -5.25 #Max we should do through the 10A socket it is currently wired into (2000W @380V)
