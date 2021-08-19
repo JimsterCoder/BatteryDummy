@@ -25,8 +25,45 @@ import time
 import queue
 #import pickle
 from threading import Thread
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
 #from gpiozero import LED #, OutputDevice
+#------------------------------------------------------------------------------
 PID_INVERTER_QUERY  = 0x4200 #from inverter
+PID_SLEEP_AWAKE_COMMAND = 0x8200
+PID_SLEEP_AWAKE_COMMAND_Req_Sleep = 0x55
+PID_SLEEP_AWAKE_COMMAND_Quit_sleep = 0xAA
+
+BASIC_STATUS_SLEEP = 0
+BASIC_STATUS_CHARGE = 1
+BASIC_STATUS_DISCHARGE = 2
+BASIC_STATUS_IDLE = 3
+# initialize BasicStatus
+global BasicStatus
+BasicStatus = BASIC_STATUS_IDLE
+
+#------------------------------------------------------------------------------
+GPIO_POS_RELAY = 26
+GPIO_NEG_RELAY = 13
+GPIO.setup(GPIO_POS_RELAY, GPIO.OUT) 
+GPIO.setup(GPIO_NEG_RELAY, GPIO.OUT) 
+global ContractorsOpen
+
+def OpenContactors():
+	global ContractorsOpen
+	GPIO.output(GPIO_NEG_RELAY, GPIO.LOW)
+	GPIO.output(GPIO_POS_RELAY, GPIO.LOW)
+	ContractorsOpen = True
+	print('CONTACTORS OPEN.')
+
+def CloseContactors():
+	global ContractorsOpen
+	print('CONTACTORS Closing.')
+	GPIO.output(GPIO_NEG_RELAY, GPIO.HIGH)
+	time.sleep(2)
+	GPIO.output(GPIO_POS_RELAY, GPIO.HIGH)
+	ContractorsOpen = False
+	print('CONTACTORS CLOSED.')
 
 #------------------------------------------------------------------------------
 class cSendMsg:
@@ -133,7 +170,7 @@ msg = cSendMsg( 0x4241, [ LoByte((+100 + MaxCellTemp) *10  ), HiByte((+100 + Max
 ensemblerspmsg.append(msg)
 
 # Status,Error,Alarm,Protection
-BasicStatus = 3 # 3 means idle
+#BasicStatus = initilzied above and modified by PID_SLEEP_AWAKE_COMMAND message
 CyclePeriod = 0 #WTF is this?
 Error = 0 
 Alarm = 0
@@ -202,6 +239,9 @@ sysinfomsg.append(msg)
 #logginginfo('Info Message')
 #loggingwarning('Warning Message')
 
+# open contactors on startup
+OpenContactors()
+
 # Bring up can interface at 500kbps
 print('Bring up can0 interface....')
 #logginginfo('Bring up can0 interface....')
@@ -237,6 +277,9 @@ try:
 				print('Received: ',format(rx_data.msg_id, '02x'),'  msg_type: ', rx_data.msg_type)
 				#check first byte is 0 or 2
 				if (rx_data.msg_type == 0):
+					if (ContractorsOpen):
+						CloseContactors()
+
 					for x in range(len(ensemblerspmsg)):
 						msg = can.Message(arbitration_id=ensemblerspmsg[x].id, data=ensemblerspmsg[x].msgdata, extended_id=True)
 						bus.send(msg)
@@ -252,7 +295,15 @@ try:
 						time.sleep(sysinfomsg[x].interval/1000) # interval is in milliseconds
 					print ('System Info Response Sent ')
 
-
+			elif (rx_data.msg_id == PID_SLEEP_AWAKE_COMMAND):
+				if (rx_data.msg_type == PID_SLEEP_AWAKE_COMMAND_Req_Sleep):
+					BasicStatus = BASIC_STATUS_SLEEP
+					ensemblerspmsg[4].msgdata[0] = BasicStatus
+					print('Status set to SLEEP')
+				elif (rx_data.msg_type == PID_SLEEP_AWAKE_COMMAND_Quit_sleep):
+					BasicStatus = BASIC_STATUS_IDLE
+					ensemblerspmsg[4].msgdata[0] = BasicStatus
+					print('Status set to IDLE')
 
 		# for x in range(len(sendmsg)):
 		# 	if (timenow - sendmsg[x].time > sendmsg[x].interval):
@@ -267,7 +318,11 @@ try:
 		time.sleep(0.001)
 
 except KeyboardInterrupt:
-	#Catch keyboard interrupt
-	os.system("sudo /sbin/ip link set can0 down")
 	print('\n\rKeyboard interrupt')
-	
+	#Catch keyboard interrupt
+	OpenContactors()
+	# Reset GPIO settings
+	GPIO.cleanup()
+	os.system("sudo /sbin/ip link set can0 down")
+	print('\n\rShutdown')
+
