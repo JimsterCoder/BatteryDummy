@@ -19,11 +19,17 @@ Inverter observed MaxChargeCur and ChargeCutoffVolt.
 After changing settings to Self Use the inverter sent out a request for battery to sleep (8201, 55). It did this regardless of what mode I tried.
 Modifying code to acknowledge this request and also switch on contactors on reeeipt of Inverter traffic did not change this behaviour.
 Ideas:
-C Adjust spoofed voltage to actual batt voltage now it's charged up
-D operate contactors based on received 8201 mode request. Possibly prepare for 8211 requests also.
+DONE C Adjust spoofed voltage to actual batt voltage now it's charged up
+NO NEED D operate contactors based on received 8201 mode request. Possibly prepare for 8211 requests also.
 
-DischargeCutoffVolt not observed. Discharged to 374V without stopping
-Changed BattPileVolt to 374V and discharge stopped immediately, followed by 8201 sleep request 
+**DischargeCutoffVolt not observed. Discharged to 374V without stopping
+Given this worth double checking that ChargeCutoffVolt is observed based on the inverter's own measurements of battery voltage
+
+Changed BattPileVolt to 374V and discharge stopped immediately, followed by 8201 sleep request.
+Changed DischargeCutoffVolt to 372V and it immediately started the 'getting ready to charge' process again.
+Switched to charge battery mode (within the 'peak trough' setting) and it happily set off charging the battery, still with no wake command.
+
+
 
 2/
 Adjust spoofed SOC to be outside of inverter's limits (95% & 15% I believe).
