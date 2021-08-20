@@ -24,6 +24,9 @@ NO NEED D operate contactors based on received 8201 mode request. Possibly prepa
 
 **DischargeCutoffVolt not observed. Discharged to 374V without stopping
 Given this worth double checking that ChargeCutoffVolt is observed based on the inverter's own measurements of battery voltage
+Tested by setting ChargeCutoffVoltto 376V.
+Inverter tapered current down as it reached the limit.
+
 
 Changed BattPileVolt to 374V and discharge stopped immediately, followed by 8201 sleep request.
 Changed DischargeCutoffVolt to 372V and it immediately started the 'getting ready to charge' process again.
