@@ -25,7 +25,8 @@ NO NEED D operate contactors based on received 8201 mode request. Possibly prepa
 **DischargeCutoffVolt not observed. Discharged to 374V without stopping
 Given this worth double checking that ChargeCutoffVolt is observed based on the inverter's own measurements of battery voltage
 Tested by setting ChargeCutoffVoltto 376V.
-Inverter tapered current down as it reached the limit.
+Inverter tapered current down as its displayed voltage reached the voltage limit, even though our reported voltage was still well below the limit.
+DischargeCutoffVolt tested again and again found to be dependent on our reported voltage, not the inverter's own measured voltage (discharged to 370V despite limit being 374V)
 
 
 Changed BattPileVolt to 374V and discharge stopped immediately, followed by 8201 sleep request.
