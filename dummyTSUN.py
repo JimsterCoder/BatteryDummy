@@ -129,7 +129,7 @@ ensemblerspmsg = []
 sysinfomsg = []
 
 # Battery Info 
-BatPileTotVolt = 375
+BatPileTotVolt = 373
 BatPileCur = 0
 SecLvlBMSTemp = 15
 BatSOC = 75
