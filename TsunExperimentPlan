@@ -22,6 +22,8 @@ Ideas:
 C Adjust spoofed voltage to actual batt voltage now it's charged up
 D operate contactors based on received 8201 mode request. Possibly prepare for 8211 requests also.
 
+DischargeCutoffVolt not observed. Discharged to 374V without stopping
+
 
 2/
 Adjust spoofed SOC to be outside of inverter's limits (95% & 15% I believe).
