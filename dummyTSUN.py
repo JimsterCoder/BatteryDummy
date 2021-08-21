@@ -141,7 +141,7 @@ ensemblerspmsg.append(msg)
 
 # Charge Limits
 ChargeCutoffVolt = 385
-DischargeCutoffVolt = 370
+DischargeCutoffVolt = 375
 MaxChargeCur = 2.5
 MaxDischargeCur = -5.25 #Max we should do through the 10A socket it is currently wired into (2000W @380V)
 
