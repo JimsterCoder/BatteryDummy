@@ -28,11 +28,13 @@ Tested by setting ChargeCutoffVoltto 376V.
 Inverter tapered current down as its displayed voltage reached the voltage limit, even though our reported voltage was still well below the limit.
 DischargeCutoffVolt tested again and again found to be dependent on our reported voltage, not the inverter's own measured voltage (discharged to 370V despite limit being 374V)
 
-
 Changed BattPileVolt to 374V and discharge stopped immediately, followed by 8201 sleep request.
 Changed DischargeCutoffVolt to 372V and it immediately started the 'getting ready to charge' process again.
 Switched to charge battery mode (within the 'peak trough' setting) and it happily set off charging the battery, still with no wake command.
 
+Seems as though it will not begin discharge if its measured battery voltage is below DischargeCutoffVolt
+It also will not start charging if the two are very close. As part of the charge intialisation process it draws power from the battery (-192W observed) and this drops the measured its voltage.
+If the measured value drops below DischargeCutoffVolt it ceases the charge prep process
 
 
 2/
