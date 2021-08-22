@@ -66,3 +66,7 @@ C/ charge/discharge lockouts. Does the inverter observe them?
 i/0x4281 byte0 0xAA = charge forbidden
 ii/0x4281 byte1 0xAA = discharge forbidden
 
+4/ Page9, section 2.2, Charge/Discharge command. It's meant to come from the inverter but I've never seen it.
+What happend if we send this ourselves?
+
+
