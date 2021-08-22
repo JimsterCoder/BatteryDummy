@@ -56,4 +56,13 @@ F/ SOC 35%
 Still only charging at 220W.
 Leave it for 1 hour
 After 1 hour it had come back up to the max allowed charge amps of 2.5A :) So that's good.
-3/?
+
+3/Can we tell the inverter to shut off in emergency?
+A/0x4251 Bytes 4&5, Alarms, Table 3 page 6
+
+B/ 0x4251 Bytes 6&7, protection Table 4 page 6
+
+C/ charge/discharge lockouts. Does the inverter observe them?
+i/0x4281 byte0 0xAA = charge forbidden
+ii/0x4281 byte1 0xAA = discharge forbidden
+
