@@ -46,9 +46,14 @@ B/ SOC @95%
 Inverter happy to charge & discharge at this SOC
 
 C/ SOC 14%
-
-
-B/Soc 14%
-
+Happpy to charge, will not discharge
+D/Soc 15%
+No discharge
+E/SOC 16%
+No discharge...but maybe because uit knows we haven't charged it.
+No charge either, until we power cycled it. Then at only 220W / 0.7A
+F/ SOC 35%
+Still only charging at 220W.
+Leave it for 1 hour
 
 3/?
