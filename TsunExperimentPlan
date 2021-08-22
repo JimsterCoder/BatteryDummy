@@ -37,8 +37,18 @@ It also will not start charging if the two are very close. As part of the charge
 If the measured value drops below DischargeCutoffVolt it ceases the charge prep process
 
 
-2/
-Adjust spoofed SOC to be outside of inverter's limits (95% & 15% I believe).
+2/ Adjust spoofed SOC to be outside of inverter's limits (95% & 15%).
 See if inverter will behave appropriately.
+A/ SOC @96%
+Inverter stopped charging immediately
+Inverter happy to discharge at this SOC
+B/ SOC @95%
+Inverter happy to charge & discharge at this SOC
+
+C/ SOC 14%
+
+
+B/Soc 14%
+
 
 3/?
