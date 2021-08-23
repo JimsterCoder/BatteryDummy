@@ -59,8 +59,29 @@ After 1 hour it had come back up to the max allowed charge amps of 2.5A :) So th
 
 3/Can we tell the inverter to shut off in emergency?
 A/0x4251 Bytes 4&5, Alarms, Table 3 page 6
+Sending MHV alarm didn't seem to stop discharge
+Sending 3840 (all alarms) or 3841 (not defined, see below) caused discharge to stop
+Note: I would expect 3840 to show as FF0F but via James' program's translation to hex it became 00 0F and Savvy CAN's translation understood this as 3840
+Sending 3841 moved it (predictably enough) to 01 0F. More study by Niall required
+Note: I messed up a value which caused the 'BMS' transmission program to crash and so no CAN messages were being sent by us. The TSUN stopped taking from the battery with 'BMS Lost' message and error light
+Starting messages again 3840 Alarm, inverter says 'normal' but isn't doing what it should (load balancing).
+Send 2058-all the high V alarms and none of the lows. Immediately it begins discharging again. Switching to charging mode (time of use) it refuses to charge.
+Send 1029-all the low V alarms and none of the highs. Immediately it begins charging again. Switch to self-use (discharge) and it refuses to discharge.
+Clear alarms and immediately it resumes discharging.
+
+Realised I'd made a mistake, all alarms should be 4095. 
+Sent 4095 and it stopped discharge immediately. Sent 0 and discharge began again immediately
+Switch to charge, same effects.
+
+
+Note: no errors in log on inverter or error light ever shown during this process
+
+
 
 B/ 0x4251 Bytes 6&7, protection Table 4 page 6
+Send 1029-all the low volt protection. No effect, continued discharging.
+Send 2058-all the high V protection. No effect, continued discharging.
+Send 4095-all the protections! No effect, continued discharging and happily switched to charging with the protections set.
 
 C/ charge/discharge lockouts. Does the inverter observe them?
 i/0x4281 byte0 0xAA = charge forbidden
