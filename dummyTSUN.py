@@ -173,8 +173,8 @@ ensemblerspmsg.append(msg)
 #BasicStatus = initilzied above and modified by PID_SLEEP_AWAKE_COMMAND message
 CyclePeriod = 0 #WTF is this?
 Error = 0
-Alarm = 0
-Protection = 4095
+Alarm = 4095
+Protection = 0
 
 # 0x425+1
 msg = cSendMsg( 0x4251, [  BasicStatus, LoByte( CyclePeriod), HiByte( CyclePeriod ) , Error , LoByte( Alarm ), HiByte( Alarm ), LoByte( Protection ), HiByte( Protection ) ], 10, 0)
