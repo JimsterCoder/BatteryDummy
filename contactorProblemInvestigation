@@ -1,0 +1,13 @@
+Problem
+When contactors are controlled by the Pi and relay boards the inverter does not work correctly. Symptoms are:
+  1/ Inverter refuses to operate battery
+  2/ Possibly voltage drops @inverter when inverter tries to draw power from battery on initialisation.
+When contactors are operated by direct connection to 12V battery the inverter seems to work bsolutely fine.
+
+Hypothesis:
+  1/ Insufficient current flow to close contactors correctly, causing contact reistance and voltage drop with current flow.
+  2/ Incorrect wiring meaning pre-charge circuit is main circuit.
+  3/ Incorrect program with same effect as 2
+Testing plan:
+1/ Measure current on individual contactor leads 
+  
