@@ -199,8 +199,8 @@ msg = cSendMsg( 0x4271, [ LoByte((+100 + ModuleMaxTemp) *10  ), HiByte((+100 + M
 ensemblerspmsg.append(msg)
 
 # Charge/Dis command 
-ChargeForbidden = 170 # 170 (0xAA) for effect
-DischargeForbidden = 170 # 170 (0xAA) for effect
+ChargeForbidden = 0 # 170 (0xAA) for effect
+DischargeForbidden = 0 # 170 (0xAA) for effect
 # 0x428+1 
 msg = cSendMsg( 0x4281, [ LoByte( ChargeForbidden ), LoByte( DischargeForbidden ), 0,0,0,0,0,0 ], 10, 0)
 ensemblerspmsg.append(msg)
