@@ -85,7 +85,12 @@ Send 4095-all the protections! No effect, continued discharging and happily swit
 
 C/ charge/discharge lockouts. Does the inverter observe them?
 i/0x4281 byte0 0xAA = charge forbidden
+Did not interrupt charging when set. Did not prevent inverter charging after restart. Did not prevent inverter discharging
+
 ii/0x4281 byte1 0xAA = discharge forbidden
+Did not interrupt discharging when set. Did not prevent inverter discharging after restart. Did not prevent inverter charging
+
+iii/ With both set, no change in inverter behaviour.
 
 4/ Page9, section 2.2, Charge/Discharge command. It's meant to come from the inverter but I've never seen it.
 What happend if we send this ourselves?
