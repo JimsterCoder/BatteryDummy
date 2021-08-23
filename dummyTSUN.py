@@ -174,7 +174,7 @@ ensemblerspmsg.append(msg)
 CyclePeriod = 0 #WTF is this?
 Error = 0
 Alarm = 0
-Protection = 1029
+Protection = 2058
 
 # 0x425+1
 msg = cSendMsg( 0x4251, [  BasicStatus, LoByte( CyclePeriod), HiByte( CyclePeriod ) , Error , LoByte( Alarm ), HiByte( Alarm ), LoByte( Protection ), HiByte( Protection ) ], 10, 0)
