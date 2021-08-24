@@ -1,13 +1,49 @@
-Problem
+1   Problem
 When contactors are controlled by the Pi and relay boards the inverter does not work correctly. Symptoms are:
   1/ Inverter refuses to operate battery
   2/ Possibly voltage drops @inverter when inverter tries to draw power from battery on initialisation.
 When contactors are operated by direct connection to 12V battery the inverter seems to work bsolutely fine.
 
-Hypothesis:
+2 Hypothesis:
   1/ Insufficient current flow to close contactors correctly, causing contact reistance and voltage drop with current flow.
   2/ Incorrect wiring meaning pre-charge circuit is main circuit.
   3/ Incorrect program with same effect as 2
-Testing plan:
-1/ Measure current on individual contactor leads 
+3 Testing plan:
+  1/ Establish that the correct leads are being operated by the pi and that the current flow is adequate.
+  Ensure 12V battery is being backed by charger so that there is no effect due to source voltage differences.
+  Remove pack breaker so that there is no output voltage 
+    i/ Measure current on individual contactor leads with direct connection
+    ii/ Reapeat with pi control
+  2/ Measure voltages on Leaf data connector for each pin
+  3/ Measure voltages on GPIO control leads. Both should be high (3.3V?)
+
+4 Results
+
+  1/
+    i & ii/ Current in contactor leads
+    Measuring Device       Jaycar clampmeter
+    Situation              Direct Control   Pi Control
+    Lead                      Current       Current
+    Overall from 12V            0.95        0.6
+    Yellow (+ve contactor)      0.4         0.1
+    Blue (-ve contactor)        0.34        0.5
+    Green (PreCharge relay)     0.0         0.2
+    Overall from 12V (confirm)  0.97        0.6
+    
+    Note: clampmeter is not terribly accurate at these low values
+
+  2/
+  Measuring Device       Jaycar clampmeter
+  Situation              Direct Control   Pi Control
+  Lead                      Volt          Volt
+  Overall from 12V                        14.24
+  Yellow (+ve contactor)                  0
+  Blue (-ve contactor)                    14.24
+  Green (PreCharge relay)                 14.24
+  Overall from 12V (confirm)              
+  Ensure measurement is to appropriate -ve lead. These are what part of the switching.
   
+  3/
+  Lead                  Function        Volts (free)  Volts (connected to relay board)  Relay Operational?
+  GPIO26 purple/grey    PC/Main switch  3.189         1.258                             No
+  GPIO13 orange/yellow  On/Off          3.287         1.542                             No
