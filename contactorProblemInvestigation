@@ -44,6 +44,21 @@ When contactors are operated by direct connection to 12V battery the inverter se
   Ensure measurement is to appropriate -ve lead. These are what part of the switching.
   
   3/
-  Lead                  Function        Volts (free)  Volts (connected to relay board)  Relay Operational?
-  GPIO26 purple/grey    PC/Main switch  3.189         1.258                             No
-  GPIO13 orange/yellow  On/Off          3.287         1.542                             No
+  Relay Lead                  Function        Volts (free)  Volts (connected to relay board)  Relay Operational?
+  2     GPIO26 purple/grey    PC/Main switch  3.189         1.258                             No
+  1     GPIO13 orange/yellow  On/Off          3.287         1.542                             Yes
+  
+  4/
+  All control leads swapped between relays. Relay behaviour the same, independent of control wiring*
+  And then went weird. Relay 1 comes on without control line connected. LED2 (powered by GPIO26) is on dimly.
+  
+5 Conclusion:
+  (Up until *: Relay board defective. Replace.)
+  After *: More investigation needed.
+  
+6 Further work
+  Up until *:We have had this before with Southern Research. Are these boards flawed or are we doing something bad to them?
+  Possibly transients when switching on the coil of the contactor while simultaneously switching off the coil of the relay?
+  The switching side electronics should be seperate from the power side. Worth investigating?
+  After *:
+  ?
