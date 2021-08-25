@@ -61,4 +61,13 @@ When contactors are operated by direct connection to 12V battery the inverter se
   Possibly transients when switching on the coil of the contactor while simultaneously switching off the coil of the relay?
   The switching side electronics should be seperate from the power side. Worth investigating?
   After *:
-  ?
+
+Pololu Relay Investigation
+https://www.pololu.com/product/2482:
+"The control signal is fed directly to a BSS138 N-channel MOSFET, which in turn actuates the relay coil when the
+control voltage exceeds approximately 2.5 V, up to a maximum of 20 V (see BSS138 datasheet (92k pdf) for details)."
+https://www.pololu.com/file/0J620/BSS138-7-F.pdf:
+Gate threshold: 1.2V Typ, 1.5V max
+So it could be that the pi isn't giving enough V to the mosfet?
+
+In beginning investigation I found that the leads to the relay control power pins were in a very bad state so I repaired & improved the joint.
