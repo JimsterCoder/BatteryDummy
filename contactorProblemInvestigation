@@ -71,3 +71,10 @@ Gate threshold: 1.2V Typ, 1.5V max
 So it could be that the pi isn't giving enough V to the mosfet?
 
 In beginning investigation I found that the leads to the relay control power pins were in a very bad state so I repaired & improved the joint.
+Using banch power supply I tested engage and release of each relay
+
+Relay Rising V 'On' Falling V 'Off'
+      V     A       V         A     Notes
+2     1.7V  0.04A   1.4V      0.03A Drops out occasionaly at 1.7V
+1     NA!   0.4A              @3V It started smoking
+
