@@ -78,3 +78,8 @@ Relay Rising V 'On' Falling V 'Off'
 2     1.7V  0.04A   1.4V      0.03A Drops out occasionaly at 1.7V
 1     NA!   0.4A              @3V It started smoking
 
+Replace Pololu relay board with unknown spec chinese board
+        Coil Res  A @12V (calc) P(calc)
+Pololu  356 Ohm   0.034         0.4W 
+Chinese 70        0.17          2W
+=> Relays on Chinese board are not 12V capable.
