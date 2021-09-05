@@ -1,0 +1,40 @@
+Overview
+The Inverter does not respond to all messages.
+It expects a batttery which is 'on' by default. It sends no contactor commands.
+It sends 0x4200 00 etc every 2 seconds and expects a response.
+If it gets no response but sees battery voltage it throws an error.
+We have always responded with the full 421x through 428x and this keeps the inverter happy
+Displayed voltage on inverter's screen is slightly out from measured battery voltage
+Inverter displays a nice 60 second countdown when in process of changing modes.
+When commencing battery operations or switching modes the inverter performs brief charging and discharging. If voltage drops below limits it will cancel preparations and begin the cycle again*
+
+Categories:
+Responsive
+Mixed
+No
+Untested
+
+421x
+Battery Pile Total Voltage: Mixed. 
+Battery Pile Current: No. We have only set this to 0 but the inverter will charge and discharge regardless
+second level BMS Temperature: Untested
+SOC: Responsive. Will charge/discharge beyond these limits. Allows discharge if SOC is above upper limit. Allows slow charge if SOC is below lower limit
+SOH: No/Untested away from our actual of 60%. Display does not reflect the SOH we transmit
+
+422x
+Charge Cutoff Voltage: Responsive. Tapers charge current to observe this limit based on inverter's own internal measurement of battery voltage
+Discharge Cutoff Voltage: Mixed. Dependent on our reported value not the inverter's own internal measurement
+MAX Charge Current: Responsive. Stays within this limit based on its own internal measurements
+MAX Charge Discurrent: Responsive. Stays within this limit based on its own internal measurements
+
+423x
+>>
+
+
+
+Future experiments
+* How many of the 421x-428x messages does it need?
+* second level BMS Temperature
+* charging current behaviour when SOC below/near low limit
+* SOH: Untested 
+* Which voltages need to be within which parameters for inverter to begin battery operations?
