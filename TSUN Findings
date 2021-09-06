@@ -73,10 +73,11 @@ Battery transmitted messages:
 
 Future experiments
 * How many of the 421x-428x messages does it need?
+* 4251 Error/fault test
 * second level BMS Temperature
 * charging current behaviour when SOC below/near low limit
 * SOH: Untested 
 * Which voltages need to be within which parameters for inverter to begin battery operations?
 * Basic status other values
 * How long after losing CAN traffic does it shutdown?
-* 4251 Error/fault test
+
