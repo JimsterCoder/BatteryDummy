@@ -43,26 +43,26 @@ global BasicStatus
 BasicStatus = BASIC_STATUS_IDLE
 
 #------------------------------------------------------------------------------
-GPIO_POS_RELAY = 26
-GPIO_NEG_RELAY = 13
+GPIO_POS_RELAY = 6 #was 26
+GPIO_NEG_RELAY = 5 #was 13
 GPIO.setup(GPIO_POS_RELAY, GPIO.OUT) 
 GPIO.setup(GPIO_NEG_RELAY, GPIO.OUT) 
-global ContractorsOpen
+global ContactorsOpen
 
 def OpenContactors():
-	global ContractorsOpen
-	GPIO.output(GPIO_NEG_RELAY, GPIO.LOW)
-	GPIO.output(GPIO_POS_RELAY, GPIO.LOW)
-	ContractorsOpen = True
+	global ContactorsOpen
+	GPIO.output(GPIO_NEG_RELAY, GPIO.HIGH)
+	GPIO.output(GPIO_POS_RELAY, GPIO.HIGH)
+	ContactorsOpen = True
 	print('CONTACTORS OPEN.')
 
 def CloseContactors():
-	global ContractorsOpen
+	global ContactorsOpen
 	print('CONTACTORS Closing.')
-	GPIO.output(GPIO_NEG_RELAY, GPIO.HIGH)
+	GPIO.output(GPIO_NEG_RELAY, GPIO.LOW)
 	time.sleep(2)
-	GPIO.output(GPIO_POS_RELAY, GPIO.HIGH)
-	ContractorsOpen = False
+	GPIO.output(GPIO_POS_RELAY, GPIO.LOW)
+	ContactorsOpen = False
 	print('CONTACTORS CLOSED.')
 
 #------------------------------------------------------------------------------
@@ -277,7 +277,7 @@ try:
 				print('Received: ',format(rx_data.msg_id, '02x'),'  msg_type: ', rx_data.msg_type)
 				#check first byte is 0 or 2
 				if (rx_data.msg_type == 0):
-					if (ContractorsOpen):
+					if (ContactorsOpen):
 						CloseContactors()
 
 					for x in range(len(ensemblerspmsg)):
