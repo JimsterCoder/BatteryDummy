@@ -1,36 +1,75 @@
 Overview
-The Inverter does not respond to all messages.
+The Inverter does not act on  all messages.
 It expects a batttery which is 'on' by default. It sends no contactor commands.
-It sends 0x4200 00 etc every 2 seconds and expects a response.
-If it gets no response but sees battery voltage it throws an error.
-We have always responded with the full 421x through 428x and this keeps the inverter happy
+If it ceases to receive CAN communications it will stop using the battery and display "BMS Lost" on its display*
 Displayed voltage on inverter's screen is slightly out from measured battery voltage
 Inverter displays a nice 60 second countdown when in process of changing modes.
 When commencing battery operations or switching modes the inverter performs brief charging and discharging. If voltage drops below limits it will cancel preparations and begin the cycle again*
 
+
 Categories:
 Responsive
 Mixed
-No
+No (no response)
 Untested
 
+
+Inverter transmitted messages:
+
+0x4200 0
+  Responsive
+  sent every 2 seconds, response expected.
+  If it gets no response but sees battery voltage it throws an error and will not use the battery
+  We have always responded with the full 421x through 428x and this keeps the inverter happy
+
+0x4200 2
+  Untested
+  We have never observed this message and so have never tried rewponding to it.
+
+0x8200
+  No
+  We have observed the inverter requesting sleep and awake using this command. The inverter does not seem to care which state the battery reports
+ 
+Battery transmitted messages:
+
 421x
-Battery Pile Total Voltage: Mixed. 
-Battery Pile Current: No. We have only set this to 0 but the inverter will charge and discharge regardless
-second level BMS Temperature: Untested
-SOC: Responsive. Will charge/discharge beyond these limits. Allows discharge if SOC is above upper limit. Allows slow charge if SOC is below lower limit
-SOH: No/Untested away from our actual of 60%. Display does not reflect the SOH we transmit
+  Battery Pile Total Voltage: Mixed. 
+  Battery Pile Current: No.
+    We have only set this to 0 but the inverter will charge and discharge regardless
+  Second level BMS Temperature: Untested
+  SOC: Responsive. Will charge/discharge beyond these limits. Allows discharge if SOC is above upper limit. Allows slow charge if SOC is below lower limit
+  SOH: No/Untested away from our actual of 60%. Display does not reflect the SOH we transmit
 
 422x
-Charge Cutoff Voltage: Responsive. Tapers charge current to observe this limit based on inverter's own internal measurement of battery voltage
-Discharge Cutoff Voltage: Mixed. Dependent on our reported value not the inverter's own internal measurement
-MAX Charge Current: Responsive. Stays within this limit based on its own internal measurements
-MAX Charge Discurrent: Responsive. Stays within this limit based on its own internal measurements
+  Charge Cutoff Voltage: Responsive. Tapers charge current to observe this limit based on inverter's own internal measurement of battery voltage
+  Discharge Cutoff Voltage: Mixed. Dependent on our reported value not the inverter's own internal measurement
+  MAX Charge Current: Responsive. Stays within this limit based on its own internal measurements
+  MAX Charge Discurrent: Responsive. Stays within this limit based on its own internal measurements
 
-423x
->>
+423x: Untested
+  Dummy values used for all fields here. No testing performed to ascertain sensitivity
 
+424x: Untested
+  Dummy values used for all fields here. No testing performed to ascertain sensitivity
 
+425x
+  Basic Status No.
+    A message from the inverter asks for this to change. However regardless of this value the inverter does not change its behaviour. *Only tested for sleep and idle
+  Cycle Period: Untested
+  Error: (This confusingly refers to a fault table): Untested?!
+  Alarm: Responsive
+    High Voltage alarms cause the inverter to stop charging. The inverter will begin again immediately we stop sending them
+    Low Voltage alarms cause the inverter to stop discharging. The inverter will begin again immediately we stop sending them
+      Note: Neither fault light nor any indication of trouble shown on inverter display when in Alarm condition
+  Protection: No
+
+426x: Untested
+  Dummy values used for all fields here. No testing performed to ascertain sensitivity
+
+427x: Untested
+  Dummy values used for all fields here. No testing performed to ascertain sensitivity
+
+428x: No
 
 Future experiments
 * How many of the 421x-428x messages does it need?
@@ -38,3 +77,6 @@ Future experiments
 * charging current behaviour when SOC below/near low limit
 * SOH: Untested 
 * Which voltages need to be within which parameters for inverter to begin battery operations?
+* Basic status other values
+* How long after losing CAN traffic does it shutdown?
+* 4251 Error/fault test
