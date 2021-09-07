@@ -43,8 +43,8 @@ global BasicStatus
 BasicStatus = BASIC_STATUS_IDLE
 
 #------------------------------------------------------------------------------
-GPIO_POS_RELAY = 6 #was 26
-GPIO_NEG_RELAY = 5 #was 13
+GPIO_POS_RELAY = 5
+GPIO_NEG_RELAY = 6
 GPIO.setup(GPIO_POS_RELAY, GPIO.OUT) 
 GPIO.setup(GPIO_NEG_RELAY, GPIO.OUT) 
 global ContactorsOpen
