@@ -38,7 +38,7 @@ Battery transmitted messages:
     We have only set this to 0 but the inverter will charge and discharge regardless
   Second level BMS Temperature: Untested
   SOC: Responsive. Will charge/discharge beyond these limits. Allows discharge if SOC is above upper limit. Allows slow charge if SOC is below lower limit
-  SOH: No/Untested away from our actual of 60%. Display does not reflect the SOH we transmit
+  SOH: No/Untested away from our actual of 60%. Inverter display shows 100% despite us transmitting 60%
 
 422x
   Charge Cutoff Voltage: Responsive. Tapers charge current to observe this limit based on inverter's own internal measurement of battery voltage
