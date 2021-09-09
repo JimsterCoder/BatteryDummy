@@ -186,8 +186,8 @@ ModuleMinVolt = 2 * MinSingleCellVolt
 ModuleMaxVoltNumber = 1
 ModuleMinVoltNumber = 2 
 # 0x426+1
-msg = cSendMsg( 0x4261, [ LoByte( ModuleMaxVolt *1000 ), HiByte( ModuleMaxVolt *1000 ) , LoByte( ModuleMinVolt *1000 ), HiByte( ModuleMinVolt *1000 ), LoByte( ModuleMaxVoltNumber ), HiByte( ModuleMaxVoltNumber ), LoByte( ModuleMinVoltNumber ), HiByte( ModuleMinVoltNumber ) ], 10, 0)
-ensemblerspmsg.append(msg)
+#msg = cSendMsg( 0x4261, [ LoByte( ModuleMaxVolt *1000 ), HiByte( ModuleMaxVolt *1000 ) , LoByte( ModuleMinVolt *1000 ), HiByte( ModuleMinVolt *1000 ), LoByte( ModuleMaxVoltNumber ), HiByte( ModuleMaxVoltNumber ), LoByte( ModuleMinVoltNumber ), HiByte( ModuleMinVoltNumber ) ], 10, 0)
+#ensemblerspmsg.append(msg)
 
 # Module Temps 
 ModuleMaxTemp = 16
@@ -195,8 +195,8 @@ ModuleMinTemp = 14
 ModuleMaxTempNumber = 3
 ModuleMinTempNumber = 4
 # 0x427+1
-#msg = cSendMsg( 0x4271, [ LoByte((+100 + ModuleMaxTemp) *10  ), HiByte((+100 + ModuleMaxTemp) *10 ) , LoByte((+100 + ModuleMinTemp) *10  ), HiByte((+100 + ModuleMinTemp) *10  ), LoByte( ModuleMaxTempNumber ), HiByte( ModuleMaxTempNumber ), LoByte( ModuleMinTempNumber ), HiByte( ModuleMinTempNumber ) ], 10, 0)
-#ensemblerspmsg.append(msg)
+msg = cSendMsg( 0x4271, [ LoByte((+100 + ModuleMaxTemp) *10  ), HiByte((+100 + ModuleMaxTemp) *10 ) , LoByte((+100 + ModuleMinTemp) *10  ), HiByte((+100 + ModuleMinTemp) *10  ), LoByte( ModuleMaxTempNumber ), HiByte( ModuleMaxTempNumber ), LoByte( ModuleMinTempNumber ), HiByte( ModuleMinTempNumber ) ], 10, 0)
+ensemblerspmsg.append(msg)
 
 # Charge/Dis command 
 ChargeForbidden = 0 # 170 (0xAA) for effect
