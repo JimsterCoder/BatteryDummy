@@ -136,8 +136,8 @@ BatSOC = 75
 BatSOH = 60
 
 # 0x421+1
-#msg = cSendMsg( 0x4211, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *10) , LoByte((3000 + BatPileCur) *10 ), HiByte((3000 + BatPileCur) *10 ), LoByte((100 + SecLvlBMSTemp) *10 ), HiByte((100 + SecLvlBMSTemp) *10),  int(BatSOC),  int(BatSOH) ], 10, 0)
-#ensemblerspmsg.append(msg)
+msg = cSendMsg( 0x4211, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *10) , LoByte((3000 + BatPileCur) *10 ), HiByte((3000 + BatPileCur) *10 ), LoByte((100 + SecLvlBMSTemp) *10 ), HiByte((100 + SecLvlBMSTemp) *10),  int(BatSOC),  int(BatSOH) ], 10, 0)
+ensemblerspmsg.append(msg)
 
 # Charge Limits
 ChargeCutoffVolt = 385
