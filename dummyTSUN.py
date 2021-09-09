@@ -146,8 +146,8 @@ MaxChargeCur = 2.5
 MaxDischargeCur = -5.25 #Max we should do through the 10A socket it is currently wired into (2000W @380V)
 
 # 0x422+1 
-msg = cSendMsg( 0x4221, [ LoByte( ChargeCutoffVolt*10 ), HiByte( ChargeCutoffVolt*10) , LoByte( DischargeCutoffVolt *10 ), HiByte( DischargeCutoffVolt *10 ), LoByte((+3000 + MaxChargeCur) *10 ), HiByte((+3000 + MaxChargeCur) *10), LoByte((+3000 + MaxDischargeCur) *10), HiByte((+3000 + MaxDischargeCur) *10) ], 10, 0)
-ensemblerspmsg.append(msg)
+#msg = cSendMsg( 0x4221, [ LoByte( ChargeCutoffVolt*10 ), HiByte( ChargeCutoffVolt*10) , LoByte( DischargeCutoffVolt *10 ), HiByte( DischargeCutoffVolt *10 ), LoByte((+3000 + MaxChargeCur) *10 ), HiByte((+3000 + MaxChargeCur) *10), LoByte((+3000 + MaxDischargeCur) *10), HiByte((+3000 + MaxDischargeCur) *10) ], 10, 0)
+#ensemblerspmsg.append(msg)
 
 # Cell Data
 MaxSingleCellVolt = 3.980
@@ -156,8 +156,8 @@ MaxSingleCellNumber = 1
 MinSingleCellNumber = 2
 
 # 0x423+1
-#msg = cSendMsg( 0x4231, [ LoByte( MaxSingleCellVolt *1000 ), HiByte( MaxSingleCellVolt *1000 ) , LoByte( MinSingleCellVolt *1000 ), HiByte( MinSingleCellVolt * 1000 ), LoByte( MaxSingleCellNumber ), HiByte(  MaxSingleCellNumber), LoByte( MinSingleCellNumber ), HiByte( MinSingleCellNumber) ], 10, 0)
-#ensemblerspmsg.append(msg)
+msg = cSendMsg( 0x4231, [ LoByte( MaxSingleCellVolt *1000 ), HiByte( MaxSingleCellVolt *1000 ) , LoByte( MinSingleCellVolt *1000 ), HiByte( MinSingleCellVolt * 1000 ), LoByte( MaxSingleCellNumber ), HiByte(  MaxSingleCellNumber), LoByte( MinSingleCellNumber ), HiByte( MinSingleCellNumber) ], 10, 0)
+ensemblerspmsg.append(msg)
 
 # Cell Temperatures
 MaxCellTemp = 16
