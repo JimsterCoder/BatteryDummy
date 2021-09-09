@@ -1,5 +1,7 @@
 Overview
-The Inverter does not act on  all messages.
+Unless Otherwise stated, it = The Inverter.
+It does not act on  all messages. However:
+It needs all messages from 421x to 428x to connect.
 It expects a batttery which is 'on' by default. It sends no contactor commands.
 If it ceases to receive CAN communications it will stop using the battery and display "BMS Lost" on its display*
 Displayed voltage on inverter's screen is slightly out from measured battery voltage
@@ -72,7 +74,6 @@ Battery transmitted messages:
 428x: No
 
 Future experiments
-* How many of the 421x-428x messages does it need?
 * 4251 Error/fault test
 * second level BMS Temperature
 * charging current behaviour when SOC below/near low limit
