@@ -177,8 +177,8 @@ Alarm = 0
 Protection = 0
 
 # 0x425+1
-msg = cSendMsg( 0x4251, [  BasicStatus, LoByte( CyclePeriod), HiByte( CyclePeriod ) , Error , LoByte( Alarm ), HiByte( Alarm ), LoByte( Protection ), HiByte( Protection ) ], 10, 0)
-ensemblerspmsg.append(msg)
+#msg = cSendMsg( 0x4251, [  BasicStatus, LoByte( CyclePeriod), HiByte( CyclePeriod ) , Error , LoByte( Alarm ), HiByte( Alarm ), LoByte( Protection ), HiByte( Protection ) ], 10, 0)
+#ensemblerspmsg.append(msg)
 
 # Module Volts
 ModuleMaxVolt = 2 * MaxSingleCellVolt
@@ -186,8 +186,8 @@ ModuleMinVolt = 2 * MinSingleCellVolt
 ModuleMaxVoltNumber = 1
 ModuleMinVoltNumber = 2 
 # 0x426+1
-#msg = cSendMsg( 0x4261, [ LoByte( ModuleMaxVolt *1000 ), HiByte( ModuleMaxVolt *1000 ) , LoByte( ModuleMinVolt *1000 ), HiByte( ModuleMinVolt *1000 ), LoByte( ModuleMaxVoltNumber ), HiByte( ModuleMaxVoltNumber ), LoByte( ModuleMinVoltNumber ), HiByte( ModuleMinVoltNumber ) ], 10, 0)
-#ensemblerspmsg.append(msg)
+msg = cSendMsg( 0x4261, [ LoByte( ModuleMaxVolt *1000 ), HiByte( ModuleMaxVolt *1000 ) , LoByte( ModuleMinVolt *1000 ), HiByte( ModuleMinVolt *1000 ), LoByte( ModuleMaxVoltNumber ), HiByte( ModuleMaxVoltNumber ), LoByte( ModuleMinVoltNumber ), HiByte( ModuleMinVoltNumber ) ], 10, 0)
+ensemblerspmsg.append(msg)
 
 # Module Temps 
 ModuleMaxTemp = 16
