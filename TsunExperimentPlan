@@ -101,14 +101,7 @@ ii/ Transmit only 1 message
 Remaining Msg Connect?  Notes
 4211          No        Program changed without inverter powercycle. Wait shown as soon as 4211 added, Fault shown very quickly (<20secs) afterwards.
                         From cold start shows 'wait' for roughly 1 minute & then fault
-4221          
-4231          
-4241          
-4251          
-4261          
-4271          
-4281          
-
+....Let's not do it this way, let's delete a message at a time:     
 iii/ All messages except:
 Missing Msg   Connect?  Notes
 4211          No        Fault shown after cold start (Around 1min)          
@@ -123,7 +116,7 @@ Missing Msg   Connect?  Notes
 
 For completeness:
 Missing Msg   Connect?  Notes
-None          No        @30secs goes from wait to check then 59 sec countdown Then normal operation.
+None          Yes        @30secs goes from wait to check then 59 sec countdown Then normal operation.
 
 => Conclusion: All messages from 421x to 428x are needed
 
