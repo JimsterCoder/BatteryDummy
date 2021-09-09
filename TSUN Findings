@@ -55,10 +55,10 @@ Battery transmitted messages:
   Dummy values used for all fields here. No testing performed to ascertain sensitivity
 
 425x
-  Basic Status No.
+  Basic Status No
     A message from the inverter asks for this to change. However regardless of this value the inverter does not change its behaviour. *Only tested for sleep and idle
   Cycle Period: Untested
-  Error: (This confusingly refers to a fault table): Untested?!
+  Error: No
   Alarm: Responsive
     High Voltage alarms cause the inverter to stop charging. The inverter will begin again immediately we stop sending them
     Low Voltage alarms cause the inverter to stop discharging. The inverter will begin again immediately we stop sending them
@@ -74,7 +74,6 @@ Battery transmitted messages:
 428x: No
 
 Future experiments
-* 4251 Error/fault test
 * second level BMS Temperature
 * charging current behaviour when SOC below/near low limit
 * SOH: Untested 
