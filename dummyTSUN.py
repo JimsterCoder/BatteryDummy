@@ -195,15 +195,15 @@ ModuleMinTemp = 14
 ModuleMaxTempNumber = 3
 ModuleMinTempNumber = 4
 # 0x427+1
-msg = cSendMsg( 0x4271, [ LoByte((+100 + ModuleMaxTemp) *10  ), HiByte((+100 + ModuleMaxTemp) *10 ) , LoByte((+100 + ModuleMinTemp) *10  ), HiByte((+100 + ModuleMinTemp) *10  ), LoByte( ModuleMaxTempNumber ), HiByte( ModuleMaxTempNumber ), LoByte( ModuleMinTempNumber ), HiByte( ModuleMinTempNumber ) ], 10, 0)
-ensemblerspmsg.append(msg)
+#msg = cSendMsg( 0x4271, [ LoByte((+100 + ModuleMaxTemp) *10  ), HiByte((+100 + ModuleMaxTemp) *10 ) , LoByte((+100 + ModuleMinTemp) *10  ), HiByte((+100 + ModuleMinTemp) *10  ), LoByte( ModuleMaxTempNumber ), HiByte( ModuleMaxTempNumber ), LoByte( ModuleMinTempNumber ), HiByte( ModuleMinTempNumber ) ], 10, 0)
+#ensemblerspmsg.append(msg)
 
 # Charge/Dis command 
 ChargeForbidden = 0 # 170 (0xAA) for effect
 DischargeForbidden = 0 # 170 (0xAA) for effect
 # 0x428+1 
-#msg = cSendMsg( 0x4281, [ LoByte( ChargeForbidden ), LoByte( DischargeForbidden ), 0,0,0,0,0,0 ], 10, 0)
-#ensemblerspmsg.append(msg)
+msg = cSendMsg( 0x4281, [ LoByte( ChargeForbidden ), LoByte( DischargeForbidden ), 0,0,0,0,0,0 ], 10, 0)
+ensemblerspmsg.append(msg)
 
 #------------------------------------------------------------------------------
 # LIST OF MESSAGES TO SEND IN RESPONSE TO INVERTER QUERY 'SYSTEM EQUIPMENT INFORMATION' byte 0 = 2
