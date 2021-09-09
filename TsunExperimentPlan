@@ -92,7 +92,48 @@ Did not interrupt discharging when set. Did not prevent inverter discharging aft
 
 iii/ With both set, no change in inverter behaviour.
 
-4/ Page9, section 2.2, Charge/Discharge command. It's meant to come from the inverter but I've never seen it.
-What happend if we send this ourselves?
+4/ How many of the 421x-428x messages does it need?
+i/ Cut all to estblish behaviour
+Inverter display Battery symbol has cross through it, 'wait' displayed.
+After  ~1minute displays fault on screen and shines fault light. Events list shows 'BMS Lost'.
+
+ii/ Transmit only 1 message
+Remaining Msg Connect?  Notes
+4211          No        Program changed without inverter powercycle. Wait shown as soon as 4211 added, Fault shown very quickly (<20secs) afterwards.
+                        From cold start shows 'wait' for roughly 1 minute & then fault
+4221          
+4231          
+4241          
+4251          
+4261          
+4271          
+4281          
+
+iii/ All messages except:
+Missing Msg   Connect?  Notes
+4211          No        Fault shown after cold start (Around 1min)          
+4221          No        Fault shown after cold start (Around 1min)
+4231          No        Fault shown after cold start (Around 1min)
+4241          No        Fault shown after cold start (1:06)
+4251          No        Fault shown after cold start (1:07)
+4261          No        Fault shown after cold start (Around 1min)
+4271          No        Fault shown after cold start (Within 1:30)
+4281          No        Fault shown after cold start (not sure how long after but it never connected)
+(The above tests carried out in reverse order as assumption was made that later messages would be less important)
+
+For completeness:
+Missing Msg   Connect?  Notes
+None          No        @30secs goes from wait to check then 59 sec countdown Then normal operation.
+
+=> Conclusion: All messages from 421x to 428x are needed
+
+* 4251 Error/fault test
+* second level BMS Temperature
+* charging current behaviour when SOC below/near low limit
+* SOH: Untested 
+* Which voltages need to be within which parameters for inverter to begin battery operations?
+* Basic status other values
+* How long after losing CAN traffic does it shutdown?Page9, section 2.2, Charge/Discharge command. It's meant to come from the inverter but I've never seen it.
+What happens if we send this ourselves?
 
 
