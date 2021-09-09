@@ -156,8 +156,8 @@ MaxSingleCellNumber = 1
 MinSingleCellNumber = 2
 
 # 0x423+1
-msg = cSendMsg( 0x4231, [ LoByte( MaxSingleCellVolt *1000 ), HiByte( MaxSingleCellVolt *1000 ) , LoByte( MinSingleCellVolt *1000 ), HiByte( MinSingleCellVolt * 1000 ), LoByte( MaxSingleCellNumber ), HiByte(  MaxSingleCellNumber), LoByte( MinSingleCellNumber ), HiByte( MinSingleCellNumber) ], 10, 0)
-ensemblerspmsg.append(msg)
+#msg = cSendMsg( 0x4231, [ LoByte( MaxSingleCellVolt *1000 ), HiByte( MaxSingleCellVolt *1000 ) , LoByte( MinSingleCellVolt *1000 ), HiByte( MinSingleCellVolt * 1000 ), LoByte( MaxSingleCellNumber ), HiByte(  MaxSingleCellNumber), LoByte( MinSingleCellNumber ), HiByte( MinSingleCellNumber) ], 10, 0)
+#ensemblerspmsg.append(msg)
 
 # Cell Temperatures
 MaxCellTemp = 16
@@ -166,8 +166,8 @@ MaxCellTempNumber = 3
 MinCellTempNumber = 4
 
 # 0x424+1
-#msg = cSendMsg( 0x4241, [ LoByte((+100 + MaxCellTemp) *10  ), HiByte((+100 + MaxCellTemp) *10 ) , LoByte((+100 + MinCellTemp) *10  ), HiByte((+100 + MinCellTemp) *10  ), LoByte( MaxCellTempNumber ), HiByte( MaxCellTempNumber ), LoByte( MinCellTempNumber ), HiByte( MinCellTempNumber ) ], 10, 0)
-#ensemblerspmsg.append(msg)
+msg = cSendMsg( 0x4241, [ LoByte((+100 + MaxCellTemp) *10  ), HiByte((+100 + MaxCellTemp) *10 ) , LoByte((+100 + MinCellTemp) *10  ), HiByte((+100 + MinCellTemp) *10  ), LoByte( MaxCellTempNumber ), HiByte( MaxCellTempNumber ), LoByte( MinCellTempNumber ), HiByte( MinCellTempNumber ) ], 10, 0)
+ensemblerspmsg.append(msg)
 
 # Status,Error,Alarm,Protection
 #BasicStatus = initilzied above and modified by PID_SLEEP_AWAKE_COMMAND message
