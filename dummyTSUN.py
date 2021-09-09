@@ -172,7 +172,7 @@ ensemblerspmsg.append(msg)
 # Status,Error,Alarm,Protection
 #BasicStatus = initilzied above and modified by PID_SLEEP_AWAKE_COMMAND message
 CyclePeriod = 0 #WTF is this?
-Error = 64
+Error = 128
 Alarm = 0
 Protection = 0
 
