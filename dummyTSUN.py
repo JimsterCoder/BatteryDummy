@@ -166,8 +166,8 @@ MaxCellTempNumber = 3
 MinCellTempNumber = 4
 
 # 0x424+1
-msg = cSendMsg( 0x4241, [ LoByte((+100 + MaxCellTemp) *10  ), HiByte((+100 + MaxCellTemp) *10 ) , LoByte((+100 + MinCellTemp) *10  ), HiByte((+100 + MinCellTemp) *10  ), LoByte( MaxCellTempNumber ), HiByte( MaxCellTempNumber ), LoByte( MinCellTempNumber ), HiByte( MinCellTempNumber ) ], 10, 0)
-ensemblerspmsg.append(msg)
+#msg = cSendMsg( 0x4241, [ LoByte((+100 + MaxCellTemp) *10  ), HiByte((+100 + MaxCellTemp) *10 ) , LoByte((+100 + MinCellTemp) *10  ), HiByte((+100 + MinCellTemp) *10  ), LoByte( MaxCellTempNumber ), HiByte( MaxCellTempNumber ), LoByte( MinCellTempNumber ), HiByte( MinCellTempNumber ) ], 10, 0)
+#ensemblerspmsg.append(msg)
 
 # Status,Error,Alarm,Protection
 #BasicStatus = initilzied above and modified by PID_SLEEP_AWAKE_COMMAND message
@@ -177,8 +177,8 @@ Alarm = 0
 Protection = 0
 
 # 0x425+1
-#msg = cSendMsg( 0x4251, [  BasicStatus, LoByte( CyclePeriod), HiByte( CyclePeriod ) , Error , LoByte( Alarm ), HiByte( Alarm ), LoByte( Protection ), HiByte( Protection ) ], 10, 0)
-#ensemblerspmsg.append(msg)
+msg = cSendMsg( 0x4251, [  BasicStatus, LoByte( CyclePeriod), HiByte( CyclePeriod ) , Error , LoByte( Alarm ), HiByte( Alarm ), LoByte( Protection ), HiByte( Protection ) ], 10, 0)
+ensemblerspmsg.append(msg)
 
 # Module Volts
 ModuleMaxVolt = 2 * MaxSingleCellVolt
