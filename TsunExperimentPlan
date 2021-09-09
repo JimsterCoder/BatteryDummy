@@ -72,11 +72,7 @@ Clear alarms and immediately it resumes discharging.
 Realised I'd made a mistake, all alarms should be 4095. 
 Sent 4095 and it stopped discharge immediately. Sent 0 and discharge began again immediately
 Switch to charge, same effects.
-
-
 Note: no errors in log on inverter or error light ever shown during this process
-
-
 
 B/ 0x4251 Bytes 6&7, protection Table 4 page 6
 Send 1029-all the low volt protection. No effect, continued discharging.
@@ -120,7 +116,23 @@ None          Yes        @30secs goes from wait to check then 59 sec countdown T
 
 => Conclusion: All messages from 421x to 428x are needed
 
-* 4251 Error/fault test
+5/ 4251 Error/fault test (Byte3)
+After each change dummyTSUN.py script stopped, new code pulled, py script started again.
+This causes contactors to open, inverter to drop out and go through check process again.
+          ValueBehaviour
+High Bit  Sent Chg Dis
+7        128  Normal, nothing in event list
+6        64   Normal, nothing in event list
+5        32   Normal, nothing in event list
+4        16   Normal, nothing in event list
+3        8    Normal, nothing in event list
+2        4    Normal, nothing in event list 
+1        2    Normal, nothing in event list  
+0        1    Normal, nothing in event list
+All      255  Normal, nothing in event list
+None     0    Normal, nothing in event list
+=> Conclusion: Inverter ignores these messages and is not sensitive to them
+
 * second level BMS Temperature
 * charging current behaviour when SOC below/near low limit
 * SOH: Untested 
