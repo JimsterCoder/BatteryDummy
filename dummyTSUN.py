@@ -278,6 +278,13 @@ try:
 	while True:
 		timenow = int(round(time.time() * 1000))
 
+		for x in range(len(msgFi)):
+					if (timenow - msgFi[x].time > msgFi[x].interval):
+						msgFi[x].time = int(round(time.time() * 1000))
+						msg = can.Message(arbitration_id=msgFi[x].id, data=msgFi[x].msgdata, extended_id=False)
+						bus2.send(msg)
+						time.sleep(0.001)
+
 		# non-blocking read, returns 0 if nothing read
 		rx_data = read_can()
 		#print (rx_data)
@@ -329,13 +336,7 @@ try:
 
 		# main loop delay
 
-				for x in range(len(msgFi)):
-					if (timenow - msgFi[x].time > msgFi[x].interval):
-						msgFi[x].time = int(round(time.time() * 1000))
-						msg = can.Message(arbitration_id=msgFi[x].id, data=msgFi[x].msgdata, extended_id=False)
-						bus2.send(msg)
-						time.sleep(0.001)
-
+				
 		time.sleep(0.001)
 
 except KeyboardInterrupt:
