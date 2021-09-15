@@ -252,9 +252,10 @@ msgFi.append(msg)
 OpenContactors()
 
 # Bring up can interface at 500kbps
-print('Bring up can0 interface....')
+print('Bring up can0 and can1 interfaces....')
 #logginginfo('Bring up can0 interface....')
 os.system("sudo /sbin/ip link set can0 up type can bitrate 500000")
+os.system("sudo /sbin/ip link set can1 up type can bitrate 500000")
 time.sleep(0.1)
 
 print('Ready')
