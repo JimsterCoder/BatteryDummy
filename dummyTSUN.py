@@ -230,6 +230,15 @@ sysinfomsg.append(msg)
 #msg = cSendMsg( 0x42200, [ LoByte(  ), HiByte( ) , LoByte(  ), HiByte(  ), LoByte( ), HiByte( ), LoByte( ), HiByte() ], 10, 0)
 #ensemblerspmsg.append(msg)
 
+# LIST OF MESSAGES TO BE SENT AT FIXED INTERVALS TO LEAF LBC CONTROLLER
+
+msgFi = []
+
+msg = cSendMsg( 0x50B, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00], 100, 0)
+msgFi.append(msg)
+
+
+
 #------------------------------------------------------------------------------
 # MAIN
 #------------------------------------------------------------------------------
@@ -253,6 +262,7 @@ print('Ready')
 try:
 	#bus = can.interface.Bus('can0', bustype='virtual') #TESTING
 	bus = can.interface.Bus(channel='can0', bustype='socketcan') #TESTING
+	bus2 = can.interface.Bus(channel='can1', bustype='socketcan')
 	#bus.set_filters([{"can_id": PID_REPLY, "can_mask": 0x00}])
 except OSError:
 	print('Cannot find PiCAN board.')
@@ -304,6 +314,8 @@ try:
 					BasicStatus = BASIC_STATUS_IDLE
 					ensemblerspmsg[4].msgdata[0] = BasicStatus
 					print('Status set to IDLE')
+		
+
 
 		# for x in range(len(sendmsg)):
 		# 	if (timenow - sendmsg[x].time > sendmsg[x].interval):
@@ -315,6 +327,14 @@ try:
 		# 		time.sleep(0.001)
 
 		# main loop delay
+
+				for x in range(len(msgFi)):
+					if (timenow - msgFi[x].time > msgFi[x].interval):
+						msgFi[x].time = int(round(time.time() * 1000))
+						msg = can.Message(arbitration_id=msgFi[x].id, data=msgFi[x].msgdata, extended_id=False)
+						bus2.send(msg)
+						time.sleep(0.001)
+
 		time.sleep(0.001)
 
 except KeyboardInterrupt:
@@ -324,5 +344,6 @@ except KeyboardInterrupt:
 	# Reset GPIO settings
 	GPIO.cleanup()
 	os.system("sudo /sbin/ip link set can0 down")
+	os.system("sudo /sbin/ip link set can1 down")
 	print('\n\rShutdown')
 
