@@ -143,7 +143,7 @@ ensemblerspmsg.append(msg)
 ChargeCutoffVolt = 395
 DischargeCutoffVolt = 360
 MaxChargeCur = 3.5
-MaxDischargeCur = -2.25 #5.25 is max we should do through the 10A socket it is currently wired into (2000W @380V)
+MaxDischargeCur = -4.25 #5.25 is max we should do through the 10A socket it is currently wired into (2000W @380V)
 
 # 0x422+1 
 msg = cSendMsg( 0x4221, [ LoByte( ChargeCutoffVolt*10 ), HiByte( ChargeCutoffVolt*10) , LoByte( DischargeCutoffVolt *10 ), HiByte( DischargeCutoffVolt *10 ), LoByte((+3000 + MaxChargeCur) *10 ), HiByte((+3000 + MaxChargeCur) *10), LoByte((+3000 + MaxDischargeCur) *10), HiByte((+3000 + MaxDischargeCur) *10) ], 10, 0)
