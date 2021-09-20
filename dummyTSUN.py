@@ -232,10 +232,10 @@ sysinfomsg.append(msg)
 
 # LIST OF MESSAGES TO BE SENT AT FIXED INTERVALS TO LEAF LBC CONTROLLER
 
-msgFi = []
+#msgFi = []
 
-msg = cSendMsg( 0x50B, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00], 100, 0)
-msgFi.append(msg)
+#msg = cSendMsg( 0x50B, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00], 100, 0)
+#msgFi.append(msg)
 
 
 
@@ -252,18 +252,18 @@ msgFi.append(msg)
 OpenContactors()
 
 # Bring up can interface at 500kbps
-print('Bring up can0 and can1 interfaces....')
+#print('Bring up can0 and can1 interfaces....')
 #logginginfo('Bring up can0 interface....')
 os.system("sudo /sbin/ip link set can0 up type can bitrate 500000")
-os.system("sudo /sbin/ip link set can1 up type can bitrate 500000")
+#os.system("sudo /sbin/ip link set can1 up type can bitrate 500000")
 time.sleep(0.1)
 
 print('Ready')
 
 try:
 	#bus = can.interface.Bus('can0', bustype='virtual') #TESTING
-	bus = can.interface.Bus(channel='can0', bustype='socketcan') #TESTING
-	bus2 = can.interface.Bus(channel='can1', bustype='socketcan')
+	bus = can.interface.Bus(channel='can0', bustype='socketcan')
+	#bus2 = can.interface.Bus(channel='can1', bustype='socketcan')
 	#bus.set_filters([{"can_id": PID_REPLY, "can_mask": 0x00}])
 except OSError:
 	print('Cannot find PiCAN board.')
@@ -278,12 +278,12 @@ try:
 	while True:
 		timenow = int(round(time.time() * 1000))
 
-		for x in range(len(msgFi)):
-					if (timenow - msgFi[x].time > msgFi[x].interval):
-						msgFi[x].time = int(round(time.time() * 1000))
-						msg = can.Message(arbitration_id=msgFi[x].id, data=msgFi[x].msgdata, extended_id=False)
-						bus2.send(msg)
-						time.sleep(0.001)
+		# for x in range(len(msgFi)):
+		# 			if (timenow - msgFi[x].time > msgFi[x].interval):
+		# 				msgFi[x].time = int(round(time.time() * 1000))
+		# 				msg = can.Message(arbitration_id=msgFi[x].id, data=msgFi[x].msgdata, extended_id=False)
+		# 				bus2.send(msg)
+		# 				time.sleep(0.001)
 
 		# non-blocking read, returns 0 if nothing read
 		rx_data = read_can()
@@ -346,6 +346,5 @@ except KeyboardInterrupt:
 	# Reset GPIO settings
 	GPIO.cleanup()
 	os.system("sudo /sbin/ip link set can0 down")
-	os.system("sudo /sbin/ip link set can1 down")
+	#os.system("sudo /sbin/ip link set can1 down")
 	print('\n\rShutdown')
-
