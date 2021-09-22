@@ -129,7 +129,7 @@ ensemblerspmsg = []
 sysinfomsg = []
 
 # Battery Info 
-BatPileTotVolt = 345
+BatPileTotVolt = 385
 BatPileCur = 0
 SecLvlBMSTemp = 15
 BatSOC = 75
@@ -141,7 +141,7 @@ ensemblerspmsg.append(msg)
 
 # Charge Limits
 ChargeCutoffVolt = 395
-DischargeCutoffVolt = 360
+DischargeCutoffVolt = 340
 MaxChargeCur = 3.5
 MaxDischargeCur = -4.25 #5.25 is max we should do through the 10A socket it is currently wired into (2000W @380V)
 
