@@ -132,7 +132,7 @@ sysinfomsg = []
 BatPileTotVolt = 283
 BatPileCur = 0
 SecLvlBMSTemp = 15
-BatSOC = 30
+BatSOC = 55
 BatSOH = 60
 
 # 0x421+1
