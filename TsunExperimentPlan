@@ -27,6 +27,9 @@ Given this worth double checking that ChargeCutoffVolt is observed based on the 
 Tested by setting ChargeCutoffVoltto 376V.
 Inverter tapered current down as its displayed voltage reached the voltage limit, even though our reported voltage was still well below the limit.
 DischargeCutoffVolt tested again and again found to be dependent on our reported voltage, not the inverter's own measured voltage (discharged to 370V despite limit being 374V)
+30/9/21: DischargeCutoffVolt set to 340V, TSUN dropped out at 319V and then kept retrying.
+DischargeCutoffVolt set to 250V. TSUN Came back happy => There is a 21V difference between requested and actual cutoff voltage?
+
 
 Changed BattPileVolt to 374V and discharge stopped immediately, followed by 8201 sleep request.
 Changed DischargeCutoffVolt to 372V and it immediately started the 'getting ready to charge' process again.
