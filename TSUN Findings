@@ -1,6 +1,7 @@
-Overview
+TSUN TSOL-H5.0K-H Overview
+
 Unless Otherwise stated, it = The Inverter.
-It does not act on  all messages. However:
+It does not act on all messages. However:
 It needs all messages from 421x to 428x to connect.
 It expects a batttery which is 'on' by default. It sends no contactor commands.
 If it ceases to receive CAN communications it will stop using the battery and display "BMS Lost" on its display*
@@ -26,7 +27,7 @@ Inverter transmitted messages:
 
 0x4200 2
   Untested
-  We have never observed this message and so have never tried rewponding to it.
+  We have never observed this message and so have never tried responding to it.
 
 0x8200
   No
@@ -44,7 +45,9 @@ Battery transmitted messages:
 
 422x
   Charge Cutoff Voltage: Responsive. Tapers charge current to observe this limit based on inverter's own internal measurement of battery voltage
-  Discharge Cutoff Voltage: Mixed. Dependent on our reported value not the inverter's own internal measurement
+  Discharge Cutoff Voltage: Mixed:
+    Dependent on our reported value not the inverter's own internal measurement
+    Single observation: If inverter's measured voltage is ~20V below this value it will stop discharge and then attempt to reconnect.*
   MAX Charge Current: Responsive. Stays within this limit based on its own internal measurements
   MAX Charge Discurrent: Responsive. Stays within this limit based on its own internal measurements
 
@@ -80,4 +83,5 @@ Future experiments
 * Which voltages need to be within which parameters for inverter to begin battery operations?
 * Basic status other values
 * How long after losing CAN traffic does it shutdown?
+* How does the inverter behave when internal measured battery voltage is significantly below DischargeCutoffVolt value?
 
