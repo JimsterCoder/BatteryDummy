@@ -140,8 +140,8 @@ msg = cSendMsg( 0x4211, [ LoByte( BatPileTotVolt *10 ), HiByte( BatPileTotVolt *
 ensemblerspmsg.append(msg)
 
 # Charge Limits
-ChargeCutoffVolt = 398
-DischargeCutoffVolt = 250 #Far too low but I'm playing a dangerous game today
+ChargeCutoffVolt = 400 #Pushing safe limits here to try and get LBC to give us 0 kW max charge power
+DischargeCutoffVolt = 340 #Set to see if TSUN cuts out at 40 less (ie 300) 
 MaxChargeCur = 3.5
 MaxDischargeCur = 4.5 #5.25 is max we should do through the 10A socket it is currently wired into (2000W @380V)
 
